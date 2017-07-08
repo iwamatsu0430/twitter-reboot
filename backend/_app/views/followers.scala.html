@@ -1,0 +1,24 @@
+@(loginMember: Option[Member])(member: Member)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SAW Twitter | Followers</title>
+    <link href="/assets/stylesheets/normalize.css" rel="stylesheet" />
+    <script src="/assets/javascripts/lodash.min.js"></script>
+    <script src="/assets/javascripts/superagent.js"></script>
+    <script src="/assets/javascripts/riot.min.js"></script>
+    <script src="/assets/javascripts/tag.min.js"></script>
+</head>
+<body>
+
+<script>
+    var loginInfo = {isLogin: @{loginMember.nonEmpty}, member: null};
+    var memberIds = {};
+
+    riot.mount("commonheader", {loginInfo: loginInfo, memberIds: memberIds});
+    riot.mount("commonfooter");
+</script>
+</body>
+</html>

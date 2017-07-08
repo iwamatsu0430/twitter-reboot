@@ -1,0 +1,30 @@
+@(loginMember: Option[Member])
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SAW Twitter</title>
+    <link href="/assets/stylesheets/normalize.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/style.css" rel="stylesheet" />
+    <script src="assets/javascripts/lodash.min.js"></script>
+    <script src="assets/javascripts/superagent.js"></script>
+    <script src="assets/javascripts/riot.min.js"></script>
+    <script src="assets/javascripts/tag.min.js"></script>
+</head>
+<body>
+<commonheader></commonheader>
+<div class="sg-container">
+    <div class="pg-sign">
+        <signforms></signforms>
+    </div>
+</div>
+<commonfooter></commonfooter>
+
+<script>
+    var common = riot.mount("commonheader", {isLogin: @{loginMember.nonEmpty}})[0];
+    riot.mount("commonfooter");
+    riot.mount("signforms");
+</script>
+</body>
+</html>

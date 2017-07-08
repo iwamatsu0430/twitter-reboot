@@ -1,0 +1,34 @@
+@(loginMember: Option[Member])(shareContentsId: String)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sawitter</title>
+    <link href="/assets/stylesheets/normalize.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/font-awesome.min.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/style.css" rel="stylesheet" />
+    <script src="/assets/javascripts/lodash.min.js"></script>
+    <script src="/assets/javascripts/superagent.js"></script>
+    <script src="/assets/javascripts/pnglib.js"></script>
+    <script src="/assets/javascripts/sha.js"></script>
+    <script src="/assets/javascripts/identicon.js"></script>
+    <script src="/assets/javascripts/riot.min.js"></script>
+    <script src="/assets/javascripts/tag.js"></script>
+</head>
+<body>
+
+<swt-common></swt-common>
+<swt-header></swt-header>
+<swt-contents></swt-contents>
+<swt-footer></swt-footer>
+
+<script>
+    riot.mount("swt-common", {isLogin: @{loginMember.nonEmpty}})[0];
+    riot.mount("swt-header");
+    riot.mount("swt-contents");
+    riot.mount("swt-footer");
+    sawitter.showDetail("@{shareContentsId}");
+</script>
+</body>
+</html>
