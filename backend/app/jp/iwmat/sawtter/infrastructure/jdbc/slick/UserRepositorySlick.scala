@@ -6,7 +6,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 import jp.iwmat.sawtter.generators.{ Clocker, IdentifyBuilder }
-import jp.iwmat.sawtter.models.{ SignUp, User, UserStatus }
+import jp.iwmat.sawtter.models.{ SignUp, User, UserStatus, UserToken }
 import jp.iwmat.sawtter.repositories._
 
 class UserRepositorySlick @Inject()(
@@ -44,30 +44,62 @@ class UserRepositorySlick @Inject()(
     findAny("email", email)
   }
 
-  def add(signup: SignUp): DBResult[Long] = {
-    val userId = identifyBuilder.generate()
-    val hashed = identifyBuilder.hash(signup.password)
-    val justNow = clocker.now
-    val dbio = sql"""
-      insert into
-        users
-        (user_id, email, password, status, version, updated_at, created_at)
-      values
-        ($userId, ${signup.email}, $hashed, ${UserStatus.Registered.value}, 1, $justNow, $justNow)
-    """.as[Int].map(_ => userId)
+  def findToken(token: String): DBResult[Option[UserToken]] = {
+    val dbio= sql"""
+      select
+        ut.token, ut.user_id, ut.expired_at
+      from
+        user_tokens as ut
+        join
+          users as u
+      where
+        ut.user_id = u.user_id and
+        ut.token = ${token} and
+        ut.expired_at <= ${clocker.now} and
+        u.status = ${UserStatus.Registered.value}
+      limit 1
+    """
+      .as[(String, Long, ZonedDateTime)]
+      .map(_.headOption.map { case (token, userId, expiredAt) =>
+        UserToken(userId, token, expiredAt)
+      })
     DBIOResult(dbio)
   }
 
-  def addToken(userId: Long): DBResult[String] = {
+  def add(signup: SignUp): DBResult[Long] = {
     val justNow = clocker.now
-    val token = identifyBuilder.generateUUID()
-    val dbio = sql"""
-      insert into
-        user_tokens
-        (token, user_id, expired_at, created_at)
-      values
-        ($token, $userId, ${justNow.plusDays(7)}, $justNow)
-    """.as[Int].map(_ => token)
+    val userId = identifyBuilder.generate()
+
+    def addUser() = {
+      val hashed = identifyBuilder.hash(signup.password)
+      sql"""
+        insert into
+          users
+          (user_id, email, password, status, version, updated_at, created_at)
+        values
+          ($userId, ${signup.email}, $hashed, ${UserStatus.Registered.value}, 1, $justNow, $justNow)
+      """.as[Int].map(_ => userId)
+    }
+
+    def addToken() = {
+      val token = identifyBuilder.generateUUID()
+      sql"""
+        insert into
+          user_tokens
+          (token, user_id, expired_at, created_at)
+        values
+          ($token, $userId, ${justNow.plusDays(7)}, $justNow)
+      """.as[Int].map(_ => token)
+    }
+
+    val dbio = for {
+      _ <- addUser()
+      _ <- addToken()
+    } yield userId
     DBIOResult(dbio)
+  }
+
+  def enable(userId: Long): DBResult[Unit] = {
+    ???
   }
 }

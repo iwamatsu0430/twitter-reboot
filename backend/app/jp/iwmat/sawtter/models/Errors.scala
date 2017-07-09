@@ -11,14 +11,22 @@ sealed trait Errors {
 
 object Errors {
 
-  case class Unexpected(t: Throwable) extends Errors {
-    val code = "error.unexpected"
-    val message = s""
+  trait Unexpected extends Errors
+  object Unexpected {
+    def apply(t: Throwable): Unexpected = new Unexpected {
+      val code = "error.unexpected"
+      val message = s"Unexpected error occured. error=$t"
+    }
+
+    def apply(msg: String): Unexpected = new Unexpected {
+      val code = "error.unexpected"
+      val message = msg
+    }
   }
 
   case class JsonError(error: JsError) extends Errors {
     val code = "error.json"
-    val message = s""
+    val message = s"Json error occured. error=$error"
   }
 
   case class EnumNotFound[A](key: A) extends Errors {
@@ -30,6 +38,11 @@ object Errors {
     case class Exists(signup: SignUp) extends Errors {
       val code = "error.signup.exists"
       val message = s"registed user is already exists. email=${signup.email}"
+    }
+
+    case class TokenNotFound(token: String) extends Errors {
+      val code = "error.signup.tokenNotFound"
+      val message = s"token not found. token=${token}"
     }
   }
 

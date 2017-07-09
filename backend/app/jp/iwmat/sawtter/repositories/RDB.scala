@@ -10,6 +10,6 @@ import jp.iwmat.sawtter.models.Errors
 trait RDB {
   def monad: Monad[DBResult]
   def unit: DBResult[Unit]
-  def left(e: Errors): DBResult[_]
+  def left[A](e: Errors): DBResult[A]
   def exec[A](result: DBResult[A]): Result[A]
 }

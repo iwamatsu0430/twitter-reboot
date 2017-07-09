@@ -25,6 +25,8 @@ class AuthController @Inject() (
   }
 
   def verify(token: String) = Action.async(parse.json) { implicit req =>
-    ???
+    service.verify(token).toResult { sessionKey =>
+      Ok.withSession("session" -> sessionKey)
+    }
   }
 }

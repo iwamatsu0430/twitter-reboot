@@ -10,5 +10,6 @@ class GeneratorModule(environment: Environment, configuration: Configuration) ex
   def configure() = {
     bind(classOf[Clocker]).to(classOf[ClockerImpl])
     bind(classOf[IdentifyBuilder]).to(classOf[IdentifyBuilderImpl])
+    bind(classOf[Security]).to(classOf[SecurityImpl])
   }
 }

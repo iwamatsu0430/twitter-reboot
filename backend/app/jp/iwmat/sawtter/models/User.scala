@@ -10,3 +10,9 @@ case class User(
   updatedAt: ZonedDateTime,
   createdAt: ZonedDateTime
 )
+
+object User {
+
+  def isValidForSignUpUser(userOpt: Option[User]): Boolean =
+    userOpt.isEmpty || userOpt.exists(_.status == UserStatus.Disabled)
+}

@@ -9,3 +9,8 @@ mysql:
         - "./mysql/scripts:/docker-entrypoint-initdb.d"
         - "./mysql/conf.d/:/etc/mysql/conf.d/"
         - "./mysql/my.cnf:/etc/mysql/my.cnf"
+memcached:
+    container_name: sawtter-memcached
+    build: memcached
+    ports:
+        - "11211:11211"

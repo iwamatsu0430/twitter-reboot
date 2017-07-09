@@ -8,7 +8,10 @@ trait IdentifyBuilder {
 
 // FIXME
 class IdentifyBuilderImpl extends IdentifyBuilder {
+  
   def generate() = 123L
+
   def generateUUID() = "aaa"
+
   def hash(value: String) = "aaa"
 }

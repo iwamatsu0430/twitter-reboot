@@ -67,9 +67,9 @@ class SlickDB @Inject()(
     }
   }
 
-  def left(e: Errors): DBResult[_] = {
-    val dbio: DBIO[Errors \/ Nothing] = DBIO.successful(\/.left[Errors, Nothing](e))
-    new DBIOResult[Nothing] {
+  def left[A](e: Errors): DBResult[A] = {
+    val dbio: DBIO[Errors \/ A] = DBIO.successful(\/.left[Errors, A](e))
+    new DBIOResult[A] {
       val value = EitherT(dbio)
     }
   }
