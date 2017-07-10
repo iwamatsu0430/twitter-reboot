@@ -11,7 +11,6 @@ trait IdentifyBuilder {
   def hash(value: String): String
 }
 
-// FIXME
 class IdentifyBuilderImpl extends IdentifyBuilder {
 
   def generate() = Math.abs(UUID.randomUUID.getMostSignificantBits)
