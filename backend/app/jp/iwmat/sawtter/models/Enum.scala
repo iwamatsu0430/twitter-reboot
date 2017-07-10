@@ -13,3 +13,39 @@ trait EnumCompanion[A, B <: Enum[A]] {
     .map(\/.right)
     .getOrElse(\/.left(Errors.EnumNotFound(value)))
 }
+
+object Enum {
+  object writes {
+    import play.api.libs.json._
+
+    implicit def enumWrites[A, B <: Enum[A]](implicit w: Writes[A]): Writes[B] = new Writes[B] {
+      def writes(enum: B): JsValue = {
+        Json.toJson(enum.value)
+      }
+    }
+
+    implicit def enumStringWrites[B <: Enum[String]](implicit w: Writes[String]): Writes[B] = new Writes[B] {
+      def writes(enum: B): JsValue = {
+        Json.toJson(enum.value)
+      }
+    }
+
+    implicit def enumIntWrites[B <: Enum[Int]](implicit w: Writes[Int]): Writes[B] = new Writes[B] {
+      def writes(enum: B): JsValue = {
+        Json.toJson(enum.value)
+      }
+    }
+
+    implicit def enumLongWrites[B <: Enum[Long]](implicit w: Writes[Long]): Writes[B] = new Writes[B] {
+      def writes(enum: B): JsValue = {
+        Json.toJson(enum.value)
+      }
+    }
+
+    implicit def enumBooleanWrites[B <: Enum[Boolean]](implicit w: Writes[Boolean]): Writes[B] = new Writes[B] {
+      def writes(enum: B): JsValue = {
+        Json.toJson(enum.value)
+      }
+    }
+  }
+}

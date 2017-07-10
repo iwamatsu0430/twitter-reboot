@@ -7,5 +7,5 @@ trait UserRepository {
   def findBy(email: String): DBResult[Option[User]]
   def findToken(token: String): DBResult[Option[UserToken]]
   def add(signup: SignUp): DBResult[Long]
-  def enable(userId: Long): DBResult[Unit]
+  def enable(user: User): DBResult[Unit]
 }

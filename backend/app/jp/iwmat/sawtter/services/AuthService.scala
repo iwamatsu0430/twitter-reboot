@@ -31,9 +31,9 @@ class AuthService @Inject() (
     val result = for {
       tokenOpt <- userRepository.findToken(token)
       token <- DBResult.getOrElse(tokenOpt)(Errors.signup.TokenNotFound(token))
-      _ <- userRepository.enable(token.userId)
       userOpt <- userRepository.findBy(token.userId)
       user <- DBResult.getOrElse(userOpt)(Errors.Unexpected("User must be exists"))
+      _ <- userRepository.enable(user)
       sessionKey = sessionRepository.add(user)
       // TODO send email
     } yield sessionKey

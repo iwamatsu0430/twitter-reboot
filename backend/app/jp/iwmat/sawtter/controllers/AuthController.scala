@@ -24,7 +24,7 @@ class AuthController @Inject() (
     } yield ()).toResult
   }
 
-  def verify(token: String) = Action.async(parse.json) { implicit req =>
+  def verify(token: String) = Action.async { implicit req =>
     service.verify(token).toResult { sessionKey =>
       Ok.withSession("session" -> sessionKey)
     }

@@ -15,7 +15,7 @@ object Errors {
   object Unexpected {
     def apply(t: Throwable): Unexpected = new Unexpected {
       val code = "error.unexpected"
-      val message = s"Unexpected error occured. error=$t"
+      val message = s"Unexpected error occured. error=$t, ${t.getStackTrace.mkString("\n")}" // FIXME
     }
 
     def apply(msg: String): Unexpected = new Unexpected {

@@ -55,7 +55,7 @@ class UserRepositorySlick @Inject()(
       where
         ut.user_id = u.user_id and
         ut.token = ${token} and
-        ut.expired_at <= ${clocker.now} and
+        ut.expired_at >= ${clocker.now} and
         u.status = ${UserStatus.Registered.value}
       limit 1
     """
@@ -99,7 +99,16 @@ class UserRepositorySlick @Inject()(
     DBIOResult(dbio)
   }
 
-  def enable(userId: Long): DBResult[Unit] = {
-    ???
+  def enable(user: User): DBResult[Unit] = {
+    val dbio = sqlu"""
+      update
+        users
+      set
+        status = ${UserStatus.Enabled.value},
+        version = ${user.version + 1L}
+      where
+        user_id = ${user.userId}
+    """.map(_ => ())
+    DBIOResult(dbio)
   }
 }

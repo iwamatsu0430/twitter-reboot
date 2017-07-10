@@ -1,6 +1,6 @@
 package jp.iwmat.sawtter.infrastructure.cache._shade
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{ Inject, Named, Singleton }
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
@@ -12,8 +12,8 @@ import jp.iwmat.sawtter.repositories.Cache
 
 @Singleton
 class ShadeCache @Inject()(
-  host: String,
-  port: Int
+  @Named("memcached.host") host: String,
+  @Named("memcached.port") port: Int
 )(
   implicit
   ec: ExecutionContext

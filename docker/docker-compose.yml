@@ -11,6 +11,6 @@ mysql:
         - "./mysql/my.cnf:/etc/mysql/my.cnf"
 memcached:
     container_name: sawtter-memcached
-    build: memcached
+    image: memcached
     ports:
         - "11211:11211"
