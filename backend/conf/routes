@@ -1,3 +1,5 @@
+GET         /api/health                                 jp.iwmat.sawtter.controllers.HealthController.check
+
 # Auth
 POST        /api/auth/signup                            jp.iwmat.sawtter.controllers.AuthController.signUp
 GET         /api/auth/verify/:token                     jp.iwmat.sawtter.controllers.AuthController.verify(token)

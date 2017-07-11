@@ -13,6 +13,7 @@ lazy val root = (project in file("."))
 
     libraryDependencies ++= Seq(
       ws,
+      filters,
 
       "com.typesafe.play"       %% "play-slick"           % "1.1.1",
       "mysql"                    % "mysql-connector-java" % "5.1.26",
