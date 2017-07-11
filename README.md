@@ -1,11 +1,30 @@
-1. 実行環境
+# 必要なもの
 
-  + Scala 2.11.7
-  + Playframework 2.4.2
-  + Elasticsearch 1.7.1
+- docker-compose
+- Scala
+- sbt
+- node
 
+# 実行手順
 
-2. 導入手順
+1. dockerの起動
+  ```
+  $ cd docker
+  $ docker-compose create # 初回のみ
+  $ docker-compose start
+  ```
 
-  1. Elasticsearchをlocalhost:9200, クラスター名"SAW"で接続できるように
-  2. replace_scheme.shを実行
+2. バックエンドサーバの起動
+  ```
+  $ cd backend
+  $ sbt run
+  ```
+
+3. フロントエンドサーバの起動
+  ```
+  $ cd frontend
+  $ npm i
+  $ npm run dev
+  ```
+
+4. [http://localhost:8080/](http://localhost:8080/)へアクセス
