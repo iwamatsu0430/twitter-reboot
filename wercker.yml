@@ -1,4 +1,4 @@
-- test-backend
+test-backend:
   box: 1science/sbt
   steps:
     - script:
@@ -8,7 +8,7 @@
       name: run test
       code: sbt test
 
-- test-frontend
+test-frontend:
   box: node
   steps:
     - script:
