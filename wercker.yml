@@ -1,0 +1,18 @@
+- test-backend
+  box: 1science/sbt
+  steps:
+    - script:
+      name: change to backend directory
+      code: cd backend
+    - script:
+      name: run test
+      code: sbt test
+
+- test-frontend
+  box: node
+  steps:
+    - script:
+      name: change to frontend directory
+      code: cd frontend
+    - npm-install
+    - npm-test
