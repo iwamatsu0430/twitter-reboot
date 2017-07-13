@@ -8,11 +8,33 @@ test-backend:
       name: run test
       code: sbt test
 
-test-frontend:
-  box: node
+build-backend:
+  box: 1science/sbt
   steps:
     - script:
-      name: change to frontend directory
-      code: cd frontend
-    - npm-install
-    - npm-test
+      name: change to backend directory
+      code: cd backend
+    - script:
+      name: build binary
+      code: sbt universal:packageBin
+    - script:
+      name: copy artifacts
+      code: cp target/universal/$APP_NAME-$VERSION.zip appspec.yml scripts/* $WERCKER_OUTPUT_DIR
+
+deploy-backend:
+  box: cgswong/aws
+  steps:
+    - script:
+      name: deploy backend
+      code: |
+        unzip $APP_NAME-$VERSION.zip
+        cp $APP_NAME-$VERSION dist
+        mkdir scripts
+        cp *.sh scripts
+        mkdir build
+        tar -cf build/artifact.tar dist scripts
+    - s3sync:
+      key-id: $S3_ACCESS_KEY
+      key-secret: $S3_SECRET_KEY
+      bucket-url: s3://$AWS_BUCKET_NAME/$AWS_BUCKET_PATH/
+      source-dir: build

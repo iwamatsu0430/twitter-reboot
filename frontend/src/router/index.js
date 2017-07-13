@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Hello from '@/components/Hello';
-import World from '@/components/World';
 
 Vue.use(Router);
 
@@ -11,11 +10,6 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello,
-    },
-    {
-      path: '/signup',
-      name: 'World',
-      component: World,
     },
   ],
 });

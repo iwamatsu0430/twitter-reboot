@@ -1,0 +1,18 @@
+version: 0.1
+os: linux
+files:
+  - source: /
+    destination: /var/apps
+hooks:
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: scripts/start.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 300
+      runas: root
