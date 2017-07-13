@@ -2,30 +2,22 @@ test-backend:
   box: 1science/sbt
   steps:
     - script:
-      name: change to backend directory
-      code: cd backend
-    - script:
       name: run test
-      code: sbt test
-    - script:
-      name: copy artifacts
-      code: cp * $WERCKER_OUTPUT_DIR
+      code: |
+        cd backend
+        sbt test
 
 build-backend:
   box: 1science/sbt
   steps:
     - script:
-      name: change to backend directory
-      code: |
-        pwd
-        ls -la
-        cd backend
-    - script:
       name: build binary
-      code: sbt universal:packageBin
+      code: |
+        cd backend
+        sbt universal:packageBin
     - script:
       name: copy artifacts
-      code: cp target/universal/$APP_NAME-$VERSION.zip appspec.yml scripts/* $WERCKER_OUTPUT_DIR
+      code: cp backend/target/universal/$APP_NAME-$VERSION.zip appspec.yml scripts/* $WERCKER_OUTPUT_DIR
 
 deploy-backend:
   box: cgswong/aws
