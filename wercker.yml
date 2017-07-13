@@ -13,7 +13,9 @@ build-backend:
   steps:
     - script:
       name: change to backend directory
-      code: cd backend
+      code: |
+        cd backend
+        pwd
     - script:
       name: build binary
       code: sbt universal:packageBin
