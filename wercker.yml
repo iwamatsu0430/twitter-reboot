@@ -17,7 +17,7 @@ build-backend:
         sbt universal:packageBin
     - script:
       name: copy artifacts
-      code: cp backend/target/universal/$APP_NAME-$VERSION.zip appspec.yml scripts/* $WERCKER_OUTPUT_DIR
+      code: cp backend/target/universal/$APP_NAME-$VERSION.zip backend/appspec.yml backend/scripts/* $WERCKER_OUTPUT_DIR
 
 deploy-backend:
   box: cgswong/aws
