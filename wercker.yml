@@ -7,6 +7,9 @@ test-backend:
     - script:
       name: run test
       code: sbt test
+    - script:
+      name: copy artifacts
+      code: cp * $WERCKER_OUTPUT_DIR
 
 build-backend:
   box: 1science/sbt
@@ -14,8 +17,9 @@ build-backend:
     - script:
       name: change to backend directory
       code: |
-        cd backend
         pwd
+        ls -la
+        cd backend
     - script:
       name: build binary
       code: sbt universal:packageBin
