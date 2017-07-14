@@ -26,7 +26,7 @@ deploy-backend:
       name: deploy backend
       code: |
         unzip $APP_NAME-$VERSION.zip
-        cp $APP_NAME-$VERSION dist
+        cp -rp $APP_NAME-$VERSION dist
         mkdir scripts
         cp *.sh scripts
         mkdir build
