@@ -1,3 +1,8 @@
+nginx:
+    container_name: sawtter-nginx
+    build: nginx
+    ports:
+        - "6000:80"
 mysql:
     container_name: sawtter-mysql
     build: mysql
