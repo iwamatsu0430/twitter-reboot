@@ -1,21 +1,18 @@
-nginx:
-    container_name: sawtter-nginx
-    build: nginx
-    ports:
-        - "6000:80"
-mysql:
-    container_name: sawtter-mysql
-    build: mysql
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    ports:
-        - "3306:3306"
-    volumes:
-        - "./mysql/scripts:/docker-entrypoint-initdb.d"
-        - "./mysql/conf.d/:/etc/mysql/conf.d/"
-        - "./mysql/my.cnf:/etc/mysql/my.cnf"
-memcached:
-    container_name: sawtter-memcached
-    image: memcached
-    ports:
-        - "11211:11211"
+version: '2'
+services:
+    mysql:
+        container_name: sawtter-mysql
+        build: mysql
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./mysql/scripts:/docker-entrypoint-initdb.d"
+            - "./mysql/conf.d/:/etc/mysql/conf.d/"
+            - "./mysql/my.cnf:/etc/mysql/my.cnf"
+    memcached:
+        container_name: sawtter-memcached
+        image: memcached
+        ports:
+            - "11211:11211"

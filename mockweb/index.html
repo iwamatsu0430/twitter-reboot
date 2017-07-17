@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SAWTTER</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <video autoplay loop>
+    <source src="./Workaholic.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+    <source src="./Workaholic.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+  </video>
+  <nav>
+    <ul>
+      <li><a href="#">ログイン</a></li>
+    </ul>
+  </nav>
+  <header>
+    <h1 class="logo">
+      <a href="./"><span class="desire">SAW</span>TTER</a>
+    </h1>
+    <p class="tagline">URLとコメントを気軽にシェアしよう</p>
+    <input class="search" type="text" placeholder="URLを入力">
+  </header>
+  <main>
+    <div class="comments">
+      <div class="authorization">
+        <p>このサイトにコメントするためにログインしよう</p>
+        <div class="actions">
+          <a href="#" class="login">ログイン</a>
+          <a href="#" class="signup">新規登録</a>
+        </div>
+      </div>
+      <ul>
+        <li class="comment">
+          <div>
+            <img src="https://placehold.jp/32x32.png">
+          </div>
+          <div class="comment-content">
+            <p>foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語</p>
+            <time>2017-07-18 12:00:00</time>
+          </div>
+        </li>
+        <li class="comment">
+          <div>
+            <img src="https://placehold.jp/32x32.png">
+          </div>
+          <div class="comment-content">
+            <p>foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語</p>
+            <time>2017-07-18 12:00:00</time>
+          </div>
+        </li>
+        <li class="comment">
+          <div>
+            <img src="https://placehold.jp/32x32.png">
+          </div>
+          <div class="comment-content">
+            <p>foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語foobar日本語</p>
+            <time>2017-07-18 12:00:00</time>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <iframe src="http://www.tohoho-web.com/html/iframe.htm"></iframe>
+    </div>
+  </main>
+</body>
+<script>
+const video = document.querySelector('video');
+const nav = document.querySelector('nav');
+const header = document.querySelector('header');
+const logo = document.querySelector('header .logo');
+const tagline = document.querySelector('header .tagline');
+const search = document.querySelector('header .search');
+const main = document.querySelector('main');
+
+video.playbackRate = 0.8;
+
+search.addEventListener('input', function(e) {
+  const className = 'inputed';
+  if (e.target.value === "") {
+    video.classList.remove(className);
+    nav.classList.remove(className);
+    header.classList.remove(className);
+    logo.classList.remove(className);
+    tagline.classList.remove(className);
+    search.classList.remove(className);
+    main.classList.remove(className);
+    video.play();
+  } else {
+    video.pause();
+    video.classList.add(className);
+    nav.classList.add(className);
+    header.classList.add(className);
+    logo.classList.add(className);
+    tagline.classList.add(className);
+    search.classList.add(className);
+    main.classList.add(className);
+  }
+});
+</script>
+</html>
