@@ -1,5 +1,7 @@
 'use strict';
 
+const Validation = require('./Validation');
+
 const HOST = process.env.SAWTTER_BACKEND_HOST || 'http://localhost:9010';
 
 class Sawtter {
@@ -14,14 +16,17 @@ class Sawtter {
       tagline: document.querySelector('header .tagline'),
       search: document.querySelector('header .search'),
       main: document.querySelector('main'),
+
       loginButtons: document.querySelectorAll('a.btn-login'),
       signupButtons: document.querySelectorAll('a.btn-signup'),
       forgotButtons: document.querySelectorAll('a.btn-forgot'),
+
       modal: document.querySelector('.modal'),
       modalBG: document.querySelector('.modal .background'),
       loginModal: document.querySelector('.modal .login'),
       signupModal: document.querySelector('.modal .signup'),
       forgotModal: document.querySelector('.modal .forgot'),
+
       loginForm: document.querySelector('.modal .form-login'),
       signupForm: document.querySelector('.modal .form-signup'),
       forgotForm: document.querySelector('.modal .form-forgot')
@@ -77,6 +82,14 @@ class Sawtter {
       this.doms.loginModal.classList.remove(className);
       this.doms.signupModal.classList.remove(className);
       this.doms.forgotModal.classList.remove(className);
+      document.querySelectorAll('.modal input').forEach(input => {
+        input.value = '';
+        input.classList.remove('error');
+      })
+      document.querySelectorAll('.modal label').forEach(input => {
+        input.innerText = '';
+        input.classList.remove('show');
+      })
     });
 
     this.doms.loginButtons.forEach(loginButton => loginButton.addEventListener('click', e => {
@@ -103,12 +116,37 @@ class Sawtter {
       this.doms.modal.classList.add(className);
       this.doms.loginModal.classList.remove(className);
       this.doms.signupModal.classList.remove(className);
-      console.log(this.doms.forgotModal);
       this.doms.forgotModal.classList.add(className);
     }));
 
     this.doms.loginForm.addEventListener('submit', e => {
       e.preventDefault();
+
+      const email = e.target['email'].value;
+      const password = e.target['password'].value;
+      const emailInput = document.querySelector('.modal .login input[name="email"]');
+      const passwordInput = document.querySelector('.modal .login input[name="password"]');
+      const emailMsg = document.querySelector('.modal .login .msg-email');
+      const passwordMsg = document.querySelector('.modal .login .msg-password');
+      let isValid = true;
+
+      Validation.email(email, msg => {
+        isValid = false;
+        emailMsg.innerText = msg;
+        emailMsg.classList.add('show');
+        emailInput.classList.add('error');
+      });
+      Validation.password(email, msg => {
+        isValid = false;
+        passwordMsg.innerText = msg;
+        passwordMsg.classList.add('show');
+        passwordInput.classList.add('error');
+      });
+      if (!isValid) {
+        return;
+      }
+
+      // TODO Add login action
     });
 
     this.doms.signupForm.addEventListener('submit', e => {

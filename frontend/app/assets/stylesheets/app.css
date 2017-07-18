@@ -315,14 +315,31 @@ main .content iframe {
 }
 
 .modal .base input,button {
+  margin: 0 auto;
   display: block;
-  margin: 10px auto 0;
   font-size: 18px;
+}
+
+.modal .base label {
+  display: inline-block;
+  position: relative;
+  left: calc(50% - 160px);
+  min-height: 20px;
+  font-size: 12px;
+  visibility: hidden;
+}
+
+.modal .base label.show {
+  visibility: visible;
 }
 
 .modal .base input {
   padding: 5px 10px;
   width: 80%;
+}
+
+.modal .base button {
+  margin-top: 20px;
 }
 
 .modal .login {
@@ -353,8 +370,4 @@ main .content iframe {
 .modal .forgot.show {
   z-index: 10;
   opacity: 1;
-}
-
-.modal .login input[name="email"] {
-  margin-top: 20px;
 }

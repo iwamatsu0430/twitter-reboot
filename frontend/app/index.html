@@ -28,7 +28,7 @@
   <main>
     <div class="comments">
       <div class="authorization">
-        <p>このサイトにコメントするためにログインしよう</p>
+        <p>このサイトにコメントしよう！</p>
         <div class="actions">
           <a href="#" class="btn-login btn-primary">ログイン</a>
           <a href="#" class="btn-signup">新規登録</a>
@@ -57,7 +57,9 @@
       <p>ログインしてURLをシェアしたり、コメントやいいねをしよう！</p>
       <p>パスワードを忘れた場合は<a href="#" class="btn-forgot">こちら</a></p>
       <form class="form-login">
+        <label class="msg-email color-desire"></label>
         <input type="text" name="email" placeholder="Email">
+        <label class="msg-password color-desire"></label>
         <input type="password" name="password" placeholder="Password">
         <button class="btn-primary">ログイン</button>
       </form>
@@ -66,8 +68,11 @@
       <p>会員登録をするとURLをシェアしたり、<br>コメントやいいねできるようになります。</p>
       <p>メールアドレスとパスワードを設定してください。</p>
       <form class="form-signup">
+        <label class="msg-email color-desire"></label>
         <input type="text" name="email" placeholder="Email">
+        <label class="msg-password color-desire"></label>
         <input type="password" name="password" placeholder="Password">
+        <label class="msg-password-confirm color-desire"></label>
         <input type="password" name="password-confirm" placeholder="Password(confirm)">
         <button class="btn-primary">新規登録</button>
       </form>
@@ -75,6 +80,7 @@
     <div class="base forgot">
       <p>入力されたメールアドレスにパスワードリセット用URLを送信します。</p>
       <form class="form-forgot">
+        <label class="msg-email color-desire"></label>
         <input type="text" name="email" placeholder="Email">
         <button class="btn-primary">パスワードリセット</button>
       </form>
