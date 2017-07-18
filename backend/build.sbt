@@ -1,5 +1,6 @@
 import org.flywaydb.sbt.FlywayPlugin
 import org.flywaydb.sbt.FlywayPlugin.autoImport._
+import play.sbt.PlayImport.PlayKeys._
 
 lazy val root = (project in file("."))
   .enablePlugins(
@@ -10,6 +11,7 @@ lazy val root = (project in file("."))
     name := "sawtter",
     version := "0.2",
     scalaVersion := "2.11.11",
+    playDefaultPort := 9010,
 
     libraryDependencies ++= Seq(
       ws,

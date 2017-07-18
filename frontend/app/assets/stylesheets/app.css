@@ -1,0 +1,360 @@
+/* https://coolors.co/e63946-f1faee-a8dadc-457b9d-1d3557 */
+
+/* ===================================================
+  Common
+=================================================== */
+
+* { color: #1D3557; }
+
+a { transition: 0.2s; }
+
+a:hover { color: #457B9D; }
+
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button:focus,
+input:focus {
+  outline: 0;
+}
+
+input.error {
+  border: solid 1px #E63946;
+}
+
+.color-desire {
+  color: #E63946;
+}
+
+.btn-primary {
+  border: none;
+  border-radius: 5px;
+  background: #1D3557;
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: #457B9D;
+  color: #fff;
+}
+
+/* ===================================================
+  Background
+=================================================== */
+
+.background-video {
+  position: fixed; right: 0; bottom: 0;
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto; z-index: -100;
+  opacity: 0.5;
+  transition: 0.5s;
+}
+
+/* ===================================================
+  Menu
+=================================================== */
+
+.menu {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 1;
+  opacity: 1;
+  transition: 0.5s;
+}
+
+.menu.inputed {
+  z-index: -1;
+  opacity: 0;
+}
+
+.menu ul {
+  margin: 0;
+}
+
+.menu ul li {
+  display: inline-block;
+  margin: 0;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.menu ul li a:hover {
+  color: #457B9D;
+}
+
+/* ===================================================
+  Header
+=================================================== */
+
+header {
+  position: absolute;
+  top: calc(50% - 200px);
+  width: 100%;
+  z-index: 2;
+  transition: 0.3s;
+}
+
+header.inputed {
+  top: -74px;
+}
+
+header .logo {
+  margin: 0;
+  font-size: 120px;
+  text-align: center;
+}
+
+header .logo a {
+  text-decoration: none;
+}
+
+header .logo a:hover {
+  color: #1D3557;
+}
+
+header .logo.inputed {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  font-size: 20px;
+}
+
+header .tagline {
+  margin: 0 0 50px;
+  font-size: 14px;
+  text-align: center;
+}
+
+header .search {
+  width: 100%;
+  border: none;
+  background-color: rgba(255,255,255,0.8);
+  font-size: 30px;
+  padding: 10px 150px;
+  text-align: center;
+}
+
+header .search::-webkit-input-placeholder { color: #457B9D; font-weight: 100; text-align: center; }
+header .search::-moz-placeholder { color: #457B9D; font-weight: 100; text-align: center; }
+header .search::-ms-input-placeholder { color: #457B9D; font-weight: 100; text-align: center; }
+
+header .search.inputed {
+  font-size: 12px;
+  padding: 20px 0;
+}
+
+/* ===================================================
+  Modal
+=================================================== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0;
+  transition: 0.2s;
+}
+.modal.show {
+  z-index: 10;
+  opacity: 1;
+}
+.modal .background {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ===================================================
+  Main
+=================================================== */
+
+main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 52px;
+  opacity: 0;
+  z-index: -1;
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 400px 1fr;
+  transition: 0.8s;
+}
+
+main.inputed {
+  z-index: 1;
+  opacity: 1;
+}
+
+main .comments {
+  grid-row: 1;
+  grid-column: 1;
+  background: #A8DADC;
+  overflow: scroll;
+}
+
+main .comments .authorization {
+  background: #fff;
+  width: 80%;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+main .comments .authorization p {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+}
+
+main .comments .authorization .actions {
+  text-align: center;
+  margin-top: 10px;
+}
+
+main .comments .authorization .actions .btn-login {
+  display: inline-block;
+}
+
+main .comments .authorization .actions .btn-signup {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+main .comments .authorization .actions .btn-signup:hover {
+  color: #457B9D;
+}
+
+main .comments ul {
+  list-style: none;
+  padding: 10px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+main .comments ul .comment {
+  display: flex;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+main .comments ul .comment img {
+  border-radius: 32px;
+}
+
+main .comments ul .comment .comment-content {
+  word-wrap: break-word;
+  margin-left: 10px;
+}
+
+main .comments ul .comment .comment-content p {
+  margin: 0 0 5px;
+  line-height: 18px;
+}
+
+main .comments ul .comment .comment-content time {
+  font-size: 10px;
+}
+
+main .content {
+  grid-row: 1;
+  grid-column: 2;
+  background: #F1FAEE;
+}
+
+main .content iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===================================================
+  Modal login
+=================================================== */
+
+.modal .base {
+  width: 400px;
+  background: #fff;
+  position: absolute;
+  left: calc(50% - 200px);
+  top: 100px;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.modal .base p {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+}
+
+.modal .base a {
+  transition: 0.2s;
+}
+
+.modal .base form {
+  margin: 0;
+}
+
+.modal .base input,button {
+  display: block;
+  margin: 10px auto 0;
+  font-size: 18px;
+}
+
+.modal .base input {
+  padding: 5px 10px;
+  width: 80%;
+}
+
+.modal .login {
+  z-index: -1;
+  opacity: 0;
+}
+
+.modal .login.show {
+  z-index: 10;
+  opacity: 1;
+}
+
+.modal .signup {
+  z-index: -1;
+  opacity: 0;
+}
+
+.modal .signup.show {
+  z-index: 10;
+  opacity: 1;
+}
+
+.modal .forgot {
+  z-index: -1;
+  opacity: 0;
+}
+
+.modal .forgot.show {
+  z-index: 10;
+  opacity: 1;
+}
+
+.modal .login input[name="email"] {
+  margin-top: 20px;
+}
