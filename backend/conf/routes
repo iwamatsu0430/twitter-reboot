@@ -1,4 +1,4 @@
-GET         /api/health                                 jp.iwmat.sawtter.controllers.HealthController.check
+GET         /api/health                                 jp.iwmat.sawtter.controllers.ApplicationController.healthCheck
 
 # Auth
 POST        /api/auth/signup                            jp.iwmat.sawtter.controllers.AuthController.signUp

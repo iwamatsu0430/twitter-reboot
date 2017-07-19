@@ -188,11 +188,39 @@ process.umask = function() { return 0; };
 module.exports = class Validation {
 
   static email(value, f) {
-    f.call(window, "booo!");
+    const email = value.trim();
+    if (email.length == 0) {
+      f.call(window, "メールアドレスを入力してください");
+      return;
+    }
+    // https://www.w3.org/TR/html5/forms.html#valid-e-mail-address
+    if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+      f.call(window, "正しいメールアドレスを入力してください");
+      return;
+    }
   }
 
   static password(value, f) {
-    f.call(window, "barrrrr");
+    const password = value.trim();
+    if (password.length == 0) {
+      f.call(window, "パスワードを入力してください");
+      return;
+    }
+    if (!/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,32}$/.test(password)) {
+      f.call(window, "8文字~32文字で半角英小大数字をそれぞれ含めてください");
+      return;
+    }
+  }
+
+  static passwordConfirm(value1, value2, f) {
+    const password1 = value1.trim();
+    const password2 = value2.trim();
+    if (password1 !== password2) {
+      f.call(window, "パスワードが一致しません");
+      return;
+    }
+    Validation.password(password1, f);
+    Validation.password(password2, f);
   }
 }
 
@@ -259,6 +287,15 @@ class Sawtter {
     this.doms.main.classList.remove(className);
   }
 
+  clearFormClasses() {
+    document.querySelectorAll('.modal input').forEach(input => {
+      input.classList.remove('error');
+    });
+    document.querySelectorAll('.modal label').forEach(input => {
+      input.classList.remove('show');
+    });
+  }
+
   addEventListeners() {
     this.doms.logo.addEventListener('click', e => {
       e.preventDefault();
@@ -285,11 +322,11 @@ class Sawtter {
       document.querySelectorAll('.modal input').forEach(input => {
         input.value = '';
         input.classList.remove('error');
-      })
+      });
       document.querySelectorAll('.modal label').forEach(input => {
         input.innerText = '';
         input.classList.remove('show');
-      })
+      });
     });
 
     this.doms.loginButtons.forEach(loginButton => loginButton.addEventListener('click', e => {
@@ -330,13 +367,14 @@ class Sawtter {
       const passwordMsg = document.querySelector('.modal .login .msg-password');
       let isValid = true;
 
+      this.clearFormClasses();
       Validation.email(email, msg => {
         isValid = false;
         emailMsg.innerText = msg;
         emailMsg.classList.add('show');
         emailInput.classList.add('error');
       });
-      Validation.password(email, msg => {
+      Validation.password(password, msg => {
         isValid = false;
         passwordMsg.innerText = msg;
         passwordMsg.classList.add('show');
@@ -351,10 +389,77 @@ class Sawtter {
 
     this.doms.signupForm.addEventListener('submit', e => {
       e.preventDefault();
+
+      const email = e.target['email'].value;
+      const password = e.target['password'].value;
+      const passwordConfirm = e.target['password-confirm'].value;
+      const emailInput = document.querySelector('.modal .signup input[name="email"]');
+      const passwordInput = document.querySelector('.modal .signup input[name="password"]');
+      const passwordConfirmInput = document.querySelector('.modal .signup input[name="password-confirm"]');
+      const emailMsg = document.querySelector('.modal .signup .msg-email');
+      const passwordMsg = document.querySelector('.modal .signup .msg-password');
+      const passwordConfirmMsg = document.querySelector('.modal .signup .msg-password-confirm');
+      let isValid = true;
+
+      this.clearFormClasses();
+      Validation.email(email, msg => {
+        isValid = false;
+        emailMsg.innerText = msg;
+        emailMsg.classList.add('show');
+        emailInput.classList.add('error');
+      });
+      Validation.password(password, msg => {
+        isValid = false;
+        passwordMsg.innerText = msg;
+        passwordMsg.classList.add('show');
+        passwordInput.classList.add('error');
+      });
+      Validation.passwordConfirm(password, passwordConfirm, msg => {
+        isValid = false;
+        passwordConfirmMsg.innerText = msg;
+        passwordConfirmMsg.classList.add('show');
+        passwordConfirmInput.classList.add('error');
+      });
+
+      if (!isValid) {
+        return;
+      }
+
+      fetch(`${HOST}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }).then(r => console.log(r));
     });
 
     this.doms.forgotForm.addEventListener('submit', e => {
       e.preventDefault();
+
+      const email = e.target['email'].value;
+      const emailInput = document.querySelector('.modal .forgot input[name="email"]');
+      const emailMsg = document.querySelector('.modal .forgot .msg-email');
+      let isValid = true;
+
+      this.clearFormClasses();
+      Validation.email(email, msg => {
+        isValid = false;
+        emailMsg.innerText = msg;
+        emailMsg.classList.add('show');
+        emailInput.classList.add('error');
+      });
+
+      if (!isValid) {
+        return;
+      }
+
+      // TODO Add forgot action
     });
   }
 }
