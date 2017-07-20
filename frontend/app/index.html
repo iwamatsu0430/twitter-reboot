@@ -13,7 +13,8 @@
 
   <nav class="menu">
     <ul>
-      <li class="login"><a href="#" class="btn-login">ログイン</a></li>
+      <li class="switch-logouted"><a href="#" class="btn-login">ログイン</a></li>
+      <li class="switch-logined"><a href="#" class="btn-logout">ログアウト</a></li>
     </ul>
   </nav>
 
@@ -27,12 +28,17 @@
 
   <main>
     <div class="comments">
-      <div class="authorization">
+      <div class="actions">
         <p>このサイトにコメントしよう！</p>
-        <div class="actions">
+        <div class="authorization switch-logouted">
           <a href="#" class="btn-login btn-primary">ログイン</a>
           <a href="#" class="btn-signup">新規登録</a>
         </div>
+        <form class="switch-logined">
+          <textarea></textarea>
+          <span>140</span>
+          <button class="btn-primary">投稿</button>
+        </form>
       </div>
       <ul>
         <li class="comment">
@@ -55,7 +61,7 @@
     <div class="background"></div>
     <div class="base login">
       <p>ログインしてURLをシェアしたり、コメントやいいねをしよう！</p>
-      <p>パスワードを忘れた場合は<a href="#" class="btn-forgot">こちら</a></p>
+      <!-- <p>パスワードを忘れた場合は<a href="#" class="btn-forgot">こちら</a></p> -->
       <form class="form-login">
         <label class="msg-email color-desire"></label>
         <input type="text" name="email" placeholder="Email">
@@ -85,6 +91,10 @@
         <button class="btn-primary">パスワードリセット</button>
       </form>
     </div>
+  </div>
+
+  <div class="loading">
+    <div>Loading...</div>
   </div>
 
   <div class="alert">

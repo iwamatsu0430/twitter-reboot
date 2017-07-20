@@ -11,6 +11,11 @@ sealed trait Errors {
 
 object Errors {
 
+  case object Unauthorized extends Errors {
+    val code = "error.unauthorized"
+    val message = s"Please login."
+  }
+
   trait Unexpected extends Errors
   object Unexpected {
     def apply(t: Throwable): Unexpected = new Unexpected {

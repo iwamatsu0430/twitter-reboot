@@ -31,7 +31,7 @@ class AuthController @Inject() (
 
   def verify(token: String) = Action.async { implicit req =>
     authService.verify(token).toResult { sessionKey =>
-      Redirect(conf.getString("sawtter.hosts.frontend").getOrElse(""))// FIXME Ok.withSession("session" -> sessionKey)
+      Redirect(conf.getString("sawtter.hosts.frontend").getOrElse("")) // FIXME
     }
   }
 
@@ -44,8 +44,8 @@ class AuthController @Inject() (
     }
   }
 
-  def logout = SecureAction {
-    // TODO remove cache
+  def logout = SecureAction { implicit req =>
+    sessionService.delete()
     Ok.withNewSession
   }
 }

@@ -11,4 +11,5 @@ trait Cache {
   def getInt(key: String): Option[Int]
   def getBoolean(key: String): Option[Boolean]
   def getJson[A](key: String)(implicit reads: Reads[A]): Option[A]
+  def delete(key: String): Unit
 }

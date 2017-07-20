@@ -2,12 +2,28 @@ package jp.iwmat
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-import scalaz.EitherT
+import scalaz.{ \/, \/-, EitherT }
 
 import jp.iwmat.sawtter.models.Errors
 
-package object sawtter extends ToEitherOps {
-  type Result[A] = scalaz.EitherT[Future, Errors, A]
+package object sawtter {
+  type Result[A] = EitherT[Future, Errors, A]
+
+  object Result {
+    def apply[A](value: A): Result[A] = {
+      val either: Errors \/ A = \/-(value)
+      EitherT(Future.successful(either))
+    }
+
+    def apply[A](value: Errors \/ A): Result[A] = {
+      EitherT(Future.successful(value))
+    }
+
+    def apply[A](future: Future[A])(implicit ec: ExecutionContext): Result[A] = {
+      val eitherF: Future[Errors \/ A] = future.map(a => \/-(a))
+      EitherT(eitherF)
+    }
+  }
 }
 
 trait ToEitherOps {

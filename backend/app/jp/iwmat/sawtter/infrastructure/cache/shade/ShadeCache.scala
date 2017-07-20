@@ -39,4 +39,7 @@ class ShadeCache @Inject()(
   def getJson[A](key: String)(implicit reads: Reads[A]): Option[A] =
     getString(key)
       .flatMap(Json.parse(_).asOpt[A])
+
+  def delete(key: String): Unit =
+    client.delete(key)
 }

@@ -15,14 +15,9 @@ trait EnumCompanion[A, B <: Enum[A]] {
 }
 
 object Enum {
+
   object writes {
     import play.api.libs.json._
-
-    implicit def enumWrites[A, B <: Enum[A]](implicit w: Writes[A]): Writes[B] = new Writes[B] {
-      def writes(enum: B): JsValue = {
-        Json.toJson(enum.value)
-      }
-    }
 
     implicit def enumStringWrites[B <: Enum[String]](implicit w: Writes[String]): Writes[B] = new Writes[B] {
       def writes(enum: B): JsValue = {

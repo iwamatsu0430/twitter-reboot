@@ -7,6 +7,7 @@ const HOST = process.env.SAWTTER_BACKEND_HOST || 'http://localhost:9010';
 class Sawtter {
 
   constructor() {
+    this.user = {};
     this.doms = {
       title: document.querySelector('title'),
       video: document.querySelector('.background-video'),
@@ -18,6 +19,7 @@ class Sawtter {
       main: document.querySelector('main'),
 
       loginButtons: document.querySelectorAll('a.btn-login'),
+      logoutButtons: document.querySelectorAll('a.btn-logout'),
       signupButtons: document.querySelectorAll('a.btn-signup'),
       forgotButtons: document.querySelectorAll('a.btn-forgot'),
 
@@ -31,6 +33,15 @@ class Sawtter {
       signupForm: document.querySelector('.modal .form-signup'),
       forgotForm: document.querySelector('.modal .form-forgot'),
 
+      loginedElements: document.querySelectorAll('.switch-logined'),
+      logoutedElements: document.querySelectorAll('.switch-logouted'),
+
+      commentForm: document.querySelector('.comments .actions form'),
+      commentButton: document.querySelector('.comments .actions button'),
+      commentTextArea: document.querySelector('.comments .actions form textarea'),
+      commentTextCount: document.querySelector('.comments .actions form span'),
+
+      loading: document.querySelector('.loading'),
       alert: document.querySelector('.alert')
     };
 
@@ -75,6 +86,16 @@ class Sawtter {
       input.innerText = '';
       input.classList.remove(className);
     });
+  }
+
+  showLoading() {
+    const className = 'show';
+    this.doms.loading.classList.add(className);
+  }
+
+  hideLoading() {
+    const className = 'show';
+    this.doms.loading.classList.remove(className);
   }
 
   clearFormClasses() {
@@ -125,6 +146,21 @@ class Sawtter {
       this.doms.forgotModal.classList.remove(className);
     }));
 
+    this.doms.logoutButtons.forEach(logoutButton => logoutButton.addEventListener('click', e => {
+      e.preventDefault();
+
+      fetch(`${HOST}/api/auth/logout`, {
+        mode: 'cors',
+        credentials: 'include'
+      }).then(r => {
+        if (r.status === 200) {
+          this.fetchUserInfo();
+        } else {
+          // TODO
+        }
+      });
+    }));
+
     this.doms.signupButtons.forEach(signupButton => signupButton.addEventListener('click', e => {
       e.preventDefault();
       const className = 'show';
@@ -171,6 +207,7 @@ class Sawtter {
         return;
       }
 
+      this.showLoading();
       fetch(`${HOST}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -184,10 +221,12 @@ class Sawtter {
         })
       }).then(r => {
         if (r.status === 200) {
-          this.hideModal();
+          this.fetchUserInfo();
         } else {
-          // TODO
+          this.showAlert(`認証に失敗しました。`);
         }
+        this.hideModal();
+        this.hideLoading();
       });
     });
 
@@ -229,6 +268,7 @@ class Sawtter {
         return;
       }
 
+      this.showLoading();
       fetch(`${HOST}/api/auth/signup`, {
         method: 'POST',
         headers: {
@@ -244,6 +284,7 @@ class Sawtter {
         if (r.status === 200) {
           this.showAlert(`メールアドレス「${email}」に登録確認メールを送信しました。`);
           this.hideModal();
+          this.hideLoading();
         } else {
           // TODO
         }
@@ -272,10 +313,42 @@ class Sawtter {
 
       // TODO Add forgot action
     });
+
+    this.doms.commentTextArea.addEventListener('input', e => {
+      const className = 'error';
+      const count = 140 - e.target.value.length;
+      this.doms.commentTextCount.innerText = count;
+      if (count < 0) {
+        this.doms.commentTextCount.classList.add(className);
+        this.doms.commentButton.disabled = true;
+        this.doms.commentButton.classList.add(className);
+      } else {
+        this.doms.commentTextCount.classList.remove(className);
+        this.doms.commentButton.disabled = false;
+        this.doms.commentButton.classList.remove(className);
+      }
+    });
+  }
+
+  fetchUserInfo() {
+    fetch(`${HOST}/api/user/me`, {
+      mode: 'cors',
+      credentials: 'include'
+    }).then(r => {
+      const className = 'show';
+      if (r.status === 200) {
+        this.doms.loginedElements.forEach(e => e.classList.add(className));
+        this.doms.logoutedElements.forEach(e => e.classList.remove(className));
+      } else if (r.status === 401) {
+        this.doms.loginedElements.forEach(e => e.classList.remove(className));
+        this.doms.logoutedElements.forEach(e => e.classList.add(className));
+      }
+    })
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const app = new Sawtter();
   app.addEventListeners();
+  app.fetchUserInfo();
 });

@@ -19,7 +19,8 @@ body {
 }
 
 button:focus,
-input:focus {
+input:focus,
+textarea:focus {
   outline: 0;
 }
 
@@ -45,6 +46,31 @@ input.error {
 .btn-primary:hover {
   background: #457B9D;
   color: #fff;
+}
+
+.btn-primary.error {
+  cursor: not-allowed;
+}
+
+.btn-primary.error:hover {
+  cursor: not-allowed;
+  background: #1D3557;
+}
+
+.switch-logined {
+  display: none !important;
+}
+
+.switch-logined.show {
+  display: inherit !important;
+}
+
+.switch-logouted {
+  display: none !important;
+}
+
+.switch-logouted.show {
+  display: inherit !important;
 }
 
 /* ===================================================
@@ -209,7 +235,7 @@ main .comments {
   overflow: scroll;
 }
 
-main .comments .authorization {
+main .comments .actions {
   background: #fff;
   width: 80%;
   margin: 20px auto;
@@ -217,28 +243,57 @@ main .comments .authorization {
   border-radius: 5px;
 }
 
-main .comments .authorization p {
+main .comments .actions p {
   margin: 0;
   font-size: 12px;
   text-align: center;
 }
 
-main .comments .authorization .actions {
+main .comments .actions .authorization {
   text-align: center;
   margin-top: 10px;
 }
 
-main .comments .authorization .actions .btn-login {
+main .comments .actions .authorization .btn-login {
   display: inline-block;
 }
 
-main .comments .authorization .actions .btn-signup {
+main .comments .actions .authorization .btn-signup {
   font-size: 12px;
   margin-left: 10px;
 }
 
-main .comments .authorization .actions .btn-signup:hover {
+main .comments .actions .authorization .btn-signup:hover {
   color: #457B9D;
+}
+
+main .comments .actions form {
+  margin: 0;
+  position: relative;
+}
+
+main .comments .actions form textarea {
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid #457B9D;
+  border-radius: 5px;
+  min-height: 100px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+main .comments .actions form span {
+  position: absolute;
+  right: 10px;
+  bottom: 55px;
+}
+
+main .comments .actions form span.error {
+  color: #E63946;
+}
+
+main .comments .actions form button {
+  margin: 10px auto 0;
 }
 
 main .comments ul {
@@ -370,6 +425,91 @@ main .content iframe {
 .modal .forgot.show {
   z-index: 10;
   opacity: 1;
+}
+
+/* ===================================================
+  loading
+=================================================== */
+
+.loading {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: -1;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.loading.show {
+  z-index: 20;
+  opacity: 1;
+}
+
+.loading div,
+.loading div:before,
+.loading div:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+
+.loading div {
+  color: #ffffff;
+  font-size: 10px;
+  margin: 80px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+.loading div:before,
+.loading div:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+
+.loading div:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.loading div:after {
+  left: 3.5em;
+}
+
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
 }
 
 /* ===================================================

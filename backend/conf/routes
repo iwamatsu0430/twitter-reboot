@@ -8,3 +8,7 @@ GET         /api/auth/logout                            jp.iwmat.sawtter.control
 
 # User
 GET         /api/user/me                                jp.iwmat.sawtter.controllers.UserController.me
+
+# Page
+GET         /api/page/confirm/:url                      jp.iwmat.sawtter.controllers.PageController.confirm(url: String)
+GET         /api/page/comments/:url                     jp.iwmat.sawtter.controllers.PageController.comments(url: String)

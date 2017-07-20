@@ -29,18 +29,13 @@ class MailgunMail @Inject()(
       "subject" -> Seq(mailData.subject),
       "text" -> Seq(mailData.text)
     )
-    println(s">>> url: $url")
-    println(s">>> key: $key")
-    println(s">>> body: $body")
     ws
       .url(url)
       .withAuth(user, key, WSAuthScheme.BASIC)
       .withRequestTimeout(10 seconds)
       .post(body)
       .onComplete {
-        case scala.util.Success(s) => {
-          println(s"status: ${s.status}, body: ${s.body}")
-        }
+        case scala.util.Success(s) => println(s"status: ${s.status}, body: ${s.body}")
         case scala.util.Failure(f) => println(s"success: $f")
       }
   }

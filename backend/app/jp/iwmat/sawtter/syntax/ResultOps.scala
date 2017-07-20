@@ -15,6 +15,10 @@ trait ResultOps extends Results with Status {
   implicit class ErrorsToOps(errors: Errors) {
     def toResult: PResult = errors match {
       // FIXME
+      case Errors.Unauthorized => Unauthorized(Json.obj(
+        "code" -> Errors.Unauthorized.code,
+        "message" -> Errors.Unauthorized.message
+      ))
       case _ => BadRequest(Json.obj(
         "code" -> errors.code,
         "message" -> errors.message
