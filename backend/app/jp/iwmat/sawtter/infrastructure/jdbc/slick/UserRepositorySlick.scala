@@ -6,7 +6,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 import jp.iwmat.sawtter.generators.{ Clocker, IdentifyBuilder }
-import jp.iwmat.sawtter.models.{ SignUp, User, UserStatus, UserToken }
+import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.repositories._
 
 class UserRepositorySlick @Inject()(
@@ -44,6 +44,26 @@ class UserRepositorySlick @Inject()(
     findAny("email", email)
   }
 
+  def findBy(login: Login): DBResult[Option[User]] = {
+    val dbio = sql"""
+      select
+        user_id, email, status, version, updated_at, created_at
+      from
+        users
+      where
+        email = ${login.email} and
+        password = ${identifyBuilder.hash(login.password)}
+      limit 1
+    """
+      .as[(Long, String, String, Long, ZonedDateTime, ZonedDateTime)]
+      .map(_.headOption.flatMap { case (userId, email, status, version, updatedAt, createdAt) =>
+        UserStatus.valueOf(status).toOption.map { status =>
+          User(userId, email, status, version, updatedAt, createdAt)
+        }
+      })
+    DBIOResult(dbio)
+  }
+
   def findToken(token: String): DBResult[Option[UserToken]] = {
     val dbio= sql"""
       select
@@ -66,9 +86,11 @@ class UserRepositorySlick @Inject()(
     DBIOResult(dbio)
   }
 
-  def add(signup: SignUp): DBResult[Long] = {
+  def add(signup: SignUp): DBResult[UserToken] = {
     val justNow = clocker.now
     val userId = identifyBuilder.generate()
+    val token = identifyBuilder.generateUUID()
+    val userToken = UserToken(userId, token, justNow.plusDays(7))
 
     def addUser() = {
       val hashed = identifyBuilder.hash(signup.password)
@@ -82,20 +104,19 @@ class UserRepositorySlick @Inject()(
     }
 
     def addToken() = {
-      val token = identifyBuilder.generateUUID()
       sql"""
         insert into
           user_tokens
           (token, user_id, expired_at, created_at)
         values
-          ($token, $userId, ${justNow.plusDays(7)}, $justNow)
+          ($token, $userId, ${userToken.expiredAt}, $justNow)
       """.as[Int].map(_ => token)
     }
 
     val dbio = for {
       _ <- addUser()
       _ <- addToken()
-    } yield userId
+    } yield userToken
     DBIOResult(dbio)
   }
 

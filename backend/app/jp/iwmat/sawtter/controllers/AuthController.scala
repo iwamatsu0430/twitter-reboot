@@ -4,29 +4,48 @@ import javax.inject.{ Inject, Singleton }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
+import play.api.Configuration
+
 import jp.iwmat.sawtter.models._
-import jp.iwmat.sawtter.services.AuthService
+import jp.iwmat.sawtter.services.{ AuthService, SessionService }
 
 @Singleton
 class AuthController @Inject() (
-  service: AuthService
+  conf: Configuration,
+  authService: AuthService,
+  val sessionService: SessionService
 )(
   implicit
   val ec: ExecutionContext
 ) extends ControllerBase {
 
-  implicit val reads = play.api.libs.json.Json.reads[SignUp]
+  implicit val signupReads = play.api.libs.json.Json.reads[SignUp]
+  implicit val loginReads = play.api.libs.json.Json.reads[Login]
 
   def signUp = Action.async(parse.json) { implicit req =>
     (for {
-      signup <- deserializeT[SignUp, Future]
-      _ <- service.signup(signup)
+      payload <- deserializeT[SignUp, Future]
+      _ <- authService.signup(payload)
     } yield ()).toResult
   }
 
   def verify(token: String) = Action.async { implicit req =>
-    service.verify(token).toResult { sessionKey =>
+    authService.verify(token).toResult { sessionKey =>
+      Redirect(conf.getString("sawtter.hosts.frontend").getOrElse(""))// FIXME Ok.withSession("session" -> sessionKey)
+    }
+  }
+
+  def login = Action.async(parse.json) { implicit req =>
+    (for {
+      payload <- deserializeT[Login, Future]
+      sessionKey <- authService.login(payload)
+    } yield sessionKey).toResult { sessionKey =>
       Ok.withSession("session" -> sessionKey)
     }
+  }
+
+  def logout = SecureAction {
+    // TODO remove cache
+    Ok.withNewSession
   }
 }

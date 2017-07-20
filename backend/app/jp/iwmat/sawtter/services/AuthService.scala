@@ -4,13 +4,17 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
+import play.api.Configuration
+
 import jp.iwmat.sawtter._
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.repositories._
 
 class AuthService @Inject() (
   userRepository: UserRepository,
-  sessionRepository: SessionRepository
+  sessionRepository: SessionRepository,
+  mail: Mail,
+  conf: Configuration
 )(
   implicit
   ec: ExecutionContext,
@@ -21,8 +25,14 @@ class AuthService @Inject() (
     val result = for {
       userOpt <- userRepository.findBy(signup.email)
       _ <- DBResult.either(User.isValidForSignUpUser(userOpt)).or(Errors.signup.Exists(signup))
-      userId <- userRepository.add(signup)
-      // TODO send email
+      token <- userRepository.add(signup)
+      mailData = MailData(
+        signup.email,
+        "info@sawtter.iwmat.jp",
+        "SAWTTERへようこそ！",
+        s"SAWTTERへようこそ！\n\n登録を完了するために以下のリンクをクリックしてください！\n${conf.getString("sawtter.hosts.backend").getOrElse("")}/api/auth/verify/${token.token}"
+      )
+      _ = mail.send(mailData)
     } yield ()
     rdb.exec(result)
   }
@@ -35,7 +45,15 @@ class AuthService @Inject() (
       user <- DBResult.getOrElse(userOpt)(Errors.Unexpected("User must be exists"))
       _ <- userRepository.enable(user)
       sessionKey = sessionRepository.add(user)
-      // TODO send email
+    } yield sessionKey
+    rdb.exec(result)
+  }
+
+  def login(login: Login): Result[String] = {
+    val result = for {
+      userOpt <- userRepository.findBy(login)
+      user <- DBResult.getOrElse(userOpt)(Errors.login.NotFound(login))
+      sessionKey = sessionRepository.add(user)
     } yield sessionKey
     rdb.exec(result)
   }

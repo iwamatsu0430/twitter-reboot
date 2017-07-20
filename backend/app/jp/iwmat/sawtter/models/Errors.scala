@@ -46,4 +46,11 @@ object Errors {
     }
   }
 
+  object login {
+    case class NotFound(login: Login) extends Errors {
+      val code = "error.login.notFound"
+      val message = s"user not found. email=${login.email}"
+    }
+  }
+
 }

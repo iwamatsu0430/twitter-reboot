@@ -29,7 +29,9 @@ class Sawtter {
 
       loginForm: document.querySelector('.modal .form-login'),
       signupForm: document.querySelector('.modal .form-signup'),
-      forgotForm: document.querySelector('.modal .form-forgot')
+      forgotForm: document.querySelector('.modal .form-forgot'),
+
+      alert: document.querySelector('.alert')
     };
 
     this.doms.video.playbackRate = 0.7;
@@ -59,6 +61,22 @@ class Sawtter {
     this.doms.main.classList.remove(className);
   }
 
+  hideModal() {
+    const className = 'show';
+    this.doms.modal.classList.remove(className);
+    this.doms.loginModal.classList.remove(className);
+    this.doms.signupModal.classList.remove(className);
+    this.doms.forgotModal.classList.remove(className);
+    document.querySelectorAll('.modal input').forEach(input => {
+      input.value = '';
+      input.classList.remove('error');
+    });
+    document.querySelectorAll('.modal label').forEach(input => {
+      input.innerText = '';
+      input.classList.remove(className);
+    });
+  }
+
   clearFormClasses() {
     document.querySelectorAll('.modal input').forEach(input => {
       input.classList.remove('error');
@@ -66,6 +84,15 @@ class Sawtter {
     document.querySelectorAll('.modal label').forEach(input => {
       input.classList.remove('show');
     });
+  }
+
+  showAlert(msg) {
+    this.doms.alert.children[0].innerText = msg;
+    this.doms.alert.classList.add('show');
+    setTimeout(() => {
+      this.doms.alert.classList.remove('show');
+      this.doms.alert.children[0].innerText = '';
+    }, 3000);
   }
 
   addEventListeners() {
@@ -86,19 +113,7 @@ class Sawtter {
 
     this.doms.modalBG.addEventListener('click', e => {
       e.preventDefault();
-      const className = 'show';
-      this.doms.modal.classList.remove(className);
-      this.doms.loginModal.classList.remove(className);
-      this.doms.signupModal.classList.remove(className);
-      this.doms.forgotModal.classList.remove(className);
-      document.querySelectorAll('.modal input').forEach(input => {
-        input.value = '';
-        input.classList.remove('error');
-      });
-      document.querySelectorAll('.modal label').forEach(input => {
-        input.innerText = '';
-        input.classList.remove('show');
-      });
+      this.hideModal();
     });
 
     this.doms.loginButtons.forEach(loginButton => loginButton.addEventListener('click', e => {
@@ -156,7 +171,24 @@ class Sawtter {
         return;
       }
 
-      // TODO Add login action
+      fetch(`${HOST}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }).then(r => {
+        if (r.status === 200) {
+          this.hideModal();
+        } else {
+          // TODO
+        }
+      });
     });
 
     this.doms.signupForm.addEventListener('submit', e => {
@@ -208,7 +240,14 @@ class Sawtter {
           email: email,
           password: password
         })
-      }).then(r => console.log(r));
+      }).then(r => {
+        if (r.status === 200) {
+          this.showAlert(`メールアドレス「${email}」に登録確認メールを送信しました。`);
+          this.hideModal();
+        } else {
+          // TODO
+        }
+      });
     });
 
     this.doms.forgotForm.addEventListener('submit', e => {
@@ -239,5 +278,4 @@ class Sawtter {
 document.addEventListener("DOMContentLoaded", () => {
   const app = new Sawtter();
   app.addEventListeners();
-  fetch(`${HOST}/api/health`).then(r => console.log(r));
 });

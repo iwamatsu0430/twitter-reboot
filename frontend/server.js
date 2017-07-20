@@ -13,7 +13,7 @@ const targets = [
   "app/assets/stylesheets/app.css",
   "src/**/*.js"
 ];
-const proxiedPort = 9010;
+const proxiedPort = 9011;
 const basePort = 9020;
 
 b.add('src/app.js');

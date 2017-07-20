@@ -3,3 +3,8 @@ GET         /api/health                                 jp.iwmat.sawtter.control
 # Auth
 POST        /api/auth/signup                            jp.iwmat.sawtter.controllers.AuthController.signUp
 GET         /api/auth/verify/:token                     jp.iwmat.sawtter.controllers.AuthController.verify(token)
+POST        /api/auth/login                             jp.iwmat.sawtter.controllers.AuthController.login
+GET         /api/auth/logout                            jp.iwmat.sawtter.controllers.AuthController.logout
+
+# User
+GET         /api/user/me                                jp.iwmat.sawtter.controllers.UserController.me
