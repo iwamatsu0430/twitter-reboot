@@ -245,6 +245,7 @@ class Sawtter {
       tagline: document.querySelector('header .tagline'),
       search: document.querySelector('header .search'),
       main: document.querySelector('main'),
+      iframe: document.querySelector('.content iframe'),
 
       loginButtons: document.querySelectorAll('a.btn-login'),
       logoutButtons: document.querySelectorAll('a.btn-logout'),
@@ -344,6 +345,32 @@ class Sawtter {
     }, 3000);
   }
 
+  loadIframe(url) {
+    fetch(`${HOST}/api/page/caniframe/${encodeURIComponent(url)}`, {
+      mode: 'cors',
+      credentials: 'include'
+    })
+      .then(r => r.json())
+      .then(canIframe => {
+        if (canIframe) {
+          this.doms.iframe.src = url;
+        } else {
+          // TODO Load page img
+        }
+      });
+  }
+
+  loadComments(url) {
+    fetch(`${HOST}/api/page/comments/${encodeURIComponent(url)}`, {
+      mode: 'cors',
+      credentials: 'include'
+    })
+      .then(r => r.json())
+      .then(comments => {
+        // TODO
+      });
+  }
+
   addEventListeners() {
     this.doms.logo.addEventListener('click', e => {
       e.preventDefault();
@@ -353,8 +380,11 @@ class Sawtter {
 
     this.doms.search.addEventListener('input', e => {
       const className = 'inputed';
-      if (e.target.value !== "") {
+      const url = e.target.value;
+      if (url !== "") {
         this.addInputed();
+        this.loadIframe(url);
+        this.loadComments(url);
       } else {
         this.removeInputed();
       }

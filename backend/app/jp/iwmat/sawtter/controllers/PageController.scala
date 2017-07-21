@@ -20,11 +20,21 @@ class PageController @Inject()(
 
   implicit val commentWrites = Json.writes[Comment]
 
-  def confirm(url: String) = Action.async {
-    pageService.confirm(url).toResult
+  def canIFrame(url: String) = Action.async {
+    pageService.canIFrame(url).toResult
   }
 
-  def comments(url: String) = Action.async {
+  // TODO
+  def fetchImage(url: String) = Action.async {
+    scala.concurrent.Future.successful(Ok)
+  }
+
+  def listComment(url: String) = Action.async {
     pageService.listComments(url).toResult
+  }
+
+  // TODO
+  def postComment(url: String) = SecureAction.async { implicit req =>
+    scala.concurrent.Future.successful(Ok)
   }
 }

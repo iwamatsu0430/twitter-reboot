@@ -12,8 +12,8 @@ class PageService @Inject()(
   pageHttp: PageHttp
 ) {
 
-  def confirm(url: String): Result[Boolean] = {
-    pageHttp.confirm(url)
+  def canIFrame(url: String): Result[Boolean] = {
+    pageHttp.canIFrame(url)
   }
 
   def listComments(url: String): Result[Seq[Comment]] = {
