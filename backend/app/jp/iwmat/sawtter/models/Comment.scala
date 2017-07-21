@@ -4,8 +4,8 @@ import java.time.ZonedDateTime
 
 case class Comment(
   commentId: Long,
-  pageId: Long,
+  url: String,
   userId: Long,
-  comment: String,
+  text: String,
   createdAt: ZonedDateTime
 )
