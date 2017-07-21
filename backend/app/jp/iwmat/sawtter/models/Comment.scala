@@ -7,5 +7,6 @@ case class Comment(
   url: String,
   userId: Long,
   text: String,
+  favorites: Long,
   createdAt: ZonedDateTime
 )

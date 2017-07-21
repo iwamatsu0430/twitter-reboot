@@ -270,6 +270,14 @@ class Sawtter {
       commentTextArea: document.querySelector('.comments .actions form textarea'),
       commentTextCount: document.querySelector('.comments .actions form span'),
 
+      commentParent: document.querySelector('.comments ul'),
+      commentBase: (() => {
+        const dom = document.querySelector('.comments ul .comment');
+        const cloned = dom.cloneNode(true);
+        dom.remove();
+        return cloned;
+      })(),
+
       loading: document.querySelector('.loading'),
       alert: document.querySelector('.alert')
     };
@@ -361,13 +369,19 @@ class Sawtter {
   }
 
   loadComments(url) {
-    fetch(`${HOST}/api/page/comments/${encodeURIComponent(url)}`, {
+    document.querySelectorAll('.comments ul .comment').forEach(c => c.remove());
+    fetch(`${HOST}/api/page/comment/${encodeURIComponent(url)}`, {
       mode: 'cors',
       credentials: 'include'
     })
       .then(r => r.json())
       .then(comments => {
-        // TODO
+        comments.forEach(c => {
+          const newComment = this.doms.commentBase.cloneNode(true);
+          newComment.querySelector('.comment-content p').innerText = c.text;
+          newComment.querySelector('.comment-content time').innerText = c.createdAt;
+          this.doms.commentParent.appendChild(newComment);
+        });
       });
   }
 
@@ -380,7 +394,7 @@ class Sawtter {
 
     this.doms.search.addEventListener('input', e => {
       const className = 'inputed';
-      const url = e.target.value;
+      const url = e.target.value.trim();
       if (url !== "") {
         this.addInputed();
         this.loadIframe(url);
@@ -388,6 +402,32 @@ class Sawtter {
       } else {
         this.removeInputed();
       }
+    });
+
+    this.doms.commentForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const url = this.doms.search.value.trim();
+      const textarea = e.target.querySelector('textarea');
+      const comment = textarea.value.trim();
+      if (comment.length < 0 || comment.length > 140) {
+        return;
+      }
+      this.showLoading();
+      fetch(`${HOST}/api/page/comment/${encodeURIComponent(url)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({
+          text: comment
+        })
+      }).then(r => {
+        textarea.value = '';
+        this.hideLoading();
+        this.loadComments(url);
+      });
     });
 
     this.doms.modalBG.addEventListener('click', e => {

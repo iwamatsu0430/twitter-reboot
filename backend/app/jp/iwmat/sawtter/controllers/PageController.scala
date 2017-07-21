@@ -2,11 +2,11 @@ package jp.iwmat.sawtter.controllers
 
 import javax.inject.{ Inject, Singleton }
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 import play.api.libs.json.Json
 
-import jp.iwmat.sawtter.models.Comment
+import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.services.{ PageService, SessionService }
 
 @Singleton
@@ -19,6 +19,7 @@ class PageController @Inject()(
 ) extends ControllerBase {
 
   implicit val commentWrites = Json.writes[Comment]
+  implicit val newCommentReads = Json.reads[NewComment]
 
   def canIFrame(url: String) = Action.async {
     pageService.canIFrame(url).toResult
@@ -33,8 +34,11 @@ class PageController @Inject()(
     pageService.listComments(url).toResult
   }
 
-  // TODO
-  def postComment(url: String) = SecureAction.async { implicit req =>
-    scala.concurrent.Future.successful(Ok)
+  def addComment(url: String) = SecureAction.async(parse.json) { implicit req =>
+    (for {
+      payload <- deserializeT[NewComment, Future]
+      // TODO validation length 1 ~ 140
+      _ <- pageService.addComment(url, payload)
+    } yield ()).toResult
   }
 }

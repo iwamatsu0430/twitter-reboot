@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext
 
 import jp.iwmat.sawtter._
 import jp.iwmat.sawtter.http.PageHttp
-import jp.iwmat.sawtter.models.Comment
+import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.repositories._
 
 class PageService @Inject()(
@@ -24,6 +24,11 @@ class PageService @Inject()(
 
   def listComments(url: String): Result[Seq[Comment]] = {
     val result = pageRepository.listComments(url)
+    rdb.exec(result)
+  }
+
+  def addComment(url: String, comment: NewComment)(implicit ctx: User): Result[Unit] = {
+    val result = pageRepository.addComment(url, comment)
     rdb.exec(result)
   }
 }

@@ -11,5 +11,6 @@ class SlickDBModule(environment: Environment, configuration: Configuration) exte
   def configure() = {
     bind(classOf[RDB]).to(classOf[SlickDB])
     bind(classOf[UserRepository]).to(classOf[UserRepositorySlick])
+    bind(classOf[PageRepository]).to(classOf[PageRepositorySlick])
   }
 }
