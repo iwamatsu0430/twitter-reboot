@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.externals
+package jp.iwmat.sawtter.http
 
 import jp.iwmat.sawtter._
 
