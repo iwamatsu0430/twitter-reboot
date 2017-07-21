@@ -122,7 +122,7 @@
 			</color>
 			<connections>
 				<relationship>
-					<name>FK_tweet_favorites_tweets</name>
+					<name>FK_comment_favorites_comments</name>
 					<source>table.comments</source>
 					<target>table.comment_favorites</target>
 					<fk_columns>
@@ -137,7 +137,7 @@
 					<on_update_action>RESTRICT</on_update_action>
 				</relationship>
 				<relationship>
-					<name>FK_tweet_favorites_users</name>
+					<name>FK_comment_favorites_users</name>
 					<source>table.users</source>
 					<target>table.comment_favorites</target>
 					<fk_columns>
@@ -164,16 +164,16 @@
 					<physical_name>comment_id</physical_name>
 					<referred_column>table.comments.comment_id</referred_column>
 					<referred_column>table.comments.comment_id</referred_column>
-					<relationship>FK_tweet_favorites_tweets</relationship>
-					<relationship>FK_tweet_favorites_tweets</relationship>
+					<relationship>FK_comment_favorites_comments</relationship>
+					<relationship>FK_comment_favorites_comments</relationship>
 					<not_null>true</not_null>
 				</normal_column>
 				<normal_column>
 					<physical_name>user_id</physical_name>
 					<referred_column>table.users.user_id</referred_column>
 					<referred_column>table.users.user_id</referred_column>
-					<relationship>FK_tweet_favorites_users</relationship>
-					<relationship>FK_tweet_favorites_users</relationship>
+					<relationship>FK_comment_favorites_users</relationship>
+					<relationship>FK_comment_favorites_users</relationship>
 					<not_null>true</not_null>
 				</normal_column>
 				<normal_column>
@@ -207,7 +207,7 @@
 			</color>
 			<connections>
 				<relationship>
-					<name>FK_tweets_users</name>
+					<name>FK_comments_users</name>
 					<source>table.users</source>
 					<target>table.comments</target>
 					<fk_columns>
@@ -234,8 +234,8 @@
 					<physical_name>user_id</physical_name>
 					<referred_column>table.users.user_id</referred_column>
 					<referred_column>table.users.user_id</referred_column>
-					<relationship>FK_tweets_users</relationship>
-					<relationship>FK_tweets_users</relationship>
+					<relationship>FK_comments_users</relationship>
+					<relationship>FK_comments_users</relationship>
 					<not_null>true</not_null>
 				</normal_column>
 				<normal_column>
