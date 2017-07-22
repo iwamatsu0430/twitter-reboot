@@ -8,16 +8,16 @@ import scala.concurrent.duration._
 import play.api.Configuration
 import play.api.libs.ws.{ WSAuthScheme, WSClient }
 
-import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.mails._
 import jp.iwmat.sawtter.repositories._
 
-class MailgunMail @Inject()(
+class MailgunMailer @Inject()(
   conf: Configuration,
   ws: WSClient
 )(
   implicit
   ec: ExecutionContext
-) extends Mail {
+) extends Mailer {
   def send(mailData: MailData): Unit = {
     val url = conf.getString("mailgun.url").getOrElse("") // FIXME
     val user = conf.getString("mailgun.user").getOrElse("") // FIXME

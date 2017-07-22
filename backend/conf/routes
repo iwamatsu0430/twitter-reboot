@@ -12,5 +12,5 @@ GET         /api/user/me                                jp.iwmat.sawtter.control
 # Page
 GET         /api/page/caniframe/:url                    jp.iwmat.sawtter.controllers.PageController.canIFrame(url: String)
 GET         /api/page/image/:url                        jp.iwmat.sawtter.controllers.PageController.fetchImage(url: String)
-GET         /api/page/comment/:url                     jp.iwmat.sawtter.controllers.PageController.listComment(url: String)
-POST        /api/page/comment/:url                     jp.iwmat.sawtter.controllers.PageController.addComment(url: String)
+GET         /api/page/comment/:url                      jp.iwmat.sawtter.controllers.PageController.listComment(url: String)
+POST        /api/page/comment/:url                      jp.iwmat.sawtter.controllers.PageController.addComment(url: String)

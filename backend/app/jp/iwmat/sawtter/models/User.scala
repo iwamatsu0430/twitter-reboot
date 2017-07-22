@@ -13,6 +13,6 @@ case class User(
 
 object User {
 
-  def isValidForSignUpUser(userOpt: Option[User]): Boolean =
+  def isValidForSignUp(userOpt: Option[User]): Boolean =
     userOpt.isEmpty || userOpt.exists(_.status == UserStatus.Disabled)
 }

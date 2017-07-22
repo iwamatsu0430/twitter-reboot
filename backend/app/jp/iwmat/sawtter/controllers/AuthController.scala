@@ -4,23 +4,20 @@ import javax.inject.{ Inject, Singleton }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-import play.api.Configuration
-
+import jp.iwmat.sawtter.configurations.SawtterConfiguration
+import jp.iwmat.sawtter.controllers.mappers.AuthMapper
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.services.{ AuthService, SessionService }
 
 @Singleton
 class AuthController @Inject() (
-  conf: Configuration,
+  sawtterConf: SawtterConfiguration,
   authService: AuthService,
   val sessionService: SessionService
 )(
   implicit
   val ec: ExecutionContext
-) extends ControllerBase {
-
-  implicit val signupReads = play.api.libs.json.Json.reads[SignUp]
-  implicit val loginReads = play.api.libs.json.Json.reads[Login]
+) extends ControllerBase with AuthMapper {
 
   def signUp = Action.async(parse.json) { implicit req =>
     (for {
@@ -31,7 +28,7 @@ class AuthController @Inject() (
 
   def verify(token: String) = Action.async { implicit req =>
     authService.verify(token).toResult { sessionKey =>
-      Redirect(conf.getString("sawtter.hosts.frontend").getOrElse("")) // FIXME
+      Redirect(sawtterConf.hosts.frontend)
     }
   }
 

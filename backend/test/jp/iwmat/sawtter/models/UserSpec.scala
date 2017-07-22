@@ -5,9 +5,9 @@ import java.time.ZonedDateTime
 import org.scalatest._
 
 class UserSpecBase extends WordSpec with MustMatchers {
-  "isValidForSignUpUser" must {
+  "isValidForSignUp" must {
     "returns true by empty user" in {
-      User.isValidForSignUpUser(None) mustBe true
+      User.isValidForSignUp(None) mustBe true
     }
 
     "returns true by disabled user" in {
@@ -19,7 +19,7 @@ class UserSpecBase extends WordSpec with MustMatchers {
         updatedAt = ZonedDateTime.now,
         createdAt = ZonedDateTime.now
       )
-      User.isValidForSignUpUser(Some(user)) mustBe true
+      User.isValidForSignUp(Some(user)) mustBe true
     }
 
     "returns false by enabled user" in {
@@ -31,7 +31,7 @@ class UserSpecBase extends WordSpec with MustMatchers {
         updatedAt = ZonedDateTime.now,
         createdAt = ZonedDateTime.now
       )
-      User.isValidForSignUpUser(Some(user)) mustBe false
+      User.isValidForSignUp(Some(user)) mustBe false
     }
   }
 }

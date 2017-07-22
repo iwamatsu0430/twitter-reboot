@@ -7,12 +7,14 @@ import play.api.mvc.{ Action => PlayAction, _ }
 import scalaz.{ \/, \/-, EitherT, Monad }
 import scalaz.std.FutureInstances
 
-import jp.iwmat.sawtter.models.{ Errors, User }
+import jp.iwmat.sawtter.controllers.mappers.MapperBase
+import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.services.SessionService
 import jp.iwmat.sawtter.syntax.{ ResultOps, ToEitherOps }
 
 trait ControllerBase
   extends Controller
+  with MapperBase
   with ToEitherOps
   with ResultOps
   with FutureInstances {
@@ -111,9 +113,5 @@ trait ControllerBase
 
   def deserializeT[A, F[_]](implicit req: Request[JsValue], reads: Reads[A], monad: Monad[F]): EitherT[F, Errors, A] = {
     deserialize(req, reads, monad).et
-  }
-
-  implicit val unitWrites: Writes[Unit] = new Writes[Unit] {
-    def writes(value: Unit): JsValue = JsNull
   }
 }

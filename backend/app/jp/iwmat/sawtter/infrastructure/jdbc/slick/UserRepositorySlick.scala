@@ -7,6 +7,7 @@ import scala.concurrent.ExecutionContext
 
 import jp.iwmat.sawtter.generators.{ Clocker, IdentifyBuilder }
 import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.types._
 import jp.iwmat.sawtter.repositories._
 
 class UserRepositorySlick @Inject()(
@@ -40,8 +41,9 @@ class UserRepositorySlick @Inject()(
     findAny("user_id", userId)
   }
 
-  def findBy(email: String): DBResult[Option[User]] = {
-    findAny("email", email)
+  def findBy(email: Email[SignUp]): DBResult[Option[User]] = {
+    // FIXME typeのgetをつくる
+    findAny("email", email.value)
   }
 
   def findBy(login: Login): DBResult[Option[User]] = {
@@ -93,13 +95,14 @@ class UserRepositorySlick @Inject()(
     val userToken = UserToken(userId, token, justNow.plusDays(7))
 
     def addUser() = {
-      val hashed = identifyBuilder.hash(signup.password)
+      val hashed = identifyBuilder.hash(signup.password.value)
+      // FIXME isoのsetをつくる
       sql"""
         insert into
           users
           (user_id, email, password, status, version, updated_at, created_at)
         values
-          ($userId, ${signup.email}, $hashed, ${UserStatus.Registered.value}, 1, $justNow, $justNow)
+          ($userId, ${signup.email.value}, $hashed, ${UserStatus.Registered.value}, 1, $justNow, $justNow)
       """.as[Int].map(_ => userId)
     }
 

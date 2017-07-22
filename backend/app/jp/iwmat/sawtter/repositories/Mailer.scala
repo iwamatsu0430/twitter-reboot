@@ -1,7 +1,7 @@
 package jp.iwmat.sawtter.repositories
 
-import jp.iwmat.sawtter.models.MailData
+import jp.iwmat.sawtter.models.mails.MailData
 
-trait Mail {
+trait Mailer {
   def send(mailData: MailData): Unit
 }

@@ -7,14 +7,16 @@ import scala.concurrent.ExecutionContext
 import play.api.Configuration
 
 import jp.iwmat.sawtter._
+import jp.iwmat.sawtter.configurations._
 import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.mails._
 import jp.iwmat.sawtter.repositories._
 
 class AuthService @Inject() (
   userRepository: UserRepository,
   sessionRepository: SessionRepository,
-  mail: Mail,
-  conf: Configuration
+  mailer: Mailer,
+  sawtterConf: SawtterConfiguration
 )(
   implicit
   ec: ExecutionContext,
@@ -24,15 +26,10 @@ class AuthService @Inject() (
   def signup(signup: SignUp): Result[Unit] = {
     val result = for {
       userOpt <- userRepository.findBy(signup.email)
-      _ <- DBResult.either(User.isValidForSignUpUser(userOpt)).or(Errors.signup.Exists(signup))
+      _ <- DBResult.either(User.isValidForSignUp(userOpt)).or(Errors.signup.Exists(signup))
       token <- userRepository.add(signup)
-      mailData = MailData(
-        signup.email,
-        "info@sawtter.iwmat.jp",
-        "SAWTTERへようこそ！",
-        s"SAWTTERへようこそ！\n\n登録を完了するために以下のリンクをクリックしてください！\n${conf.getString("sawtter.hosts.backend").getOrElse("")}/api/auth/verify/${token.token}"
-      )
-      _ = mail.send(mailData)
+      mail = SignUpMail(signup.email, sawtterConf.domain, sawtterConf.hosts.backend, token.token)
+      _ = mailer.send(mail)
     } yield ()
     rdb.exec(result)
   }
