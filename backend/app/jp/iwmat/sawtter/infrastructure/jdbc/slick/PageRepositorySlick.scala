@@ -37,7 +37,7 @@ class PageRepositorySlick @Inject()(
     """.as[(Long, String, Long, String, Long, ZonedDateTime)]
       .map(_.map {
         case (commentId, url, userId, text, favorites, createdAt) =>
-          Comment(commentId, URL(url), userId, CommentText(text), favorites, createdAt)
+          Comment(ID(commentId), URL(url), ID(userId), CommentText(text), favorites, createdAt)
       })
     DBIOResult(dbio)
   }
@@ -51,7 +51,7 @@ class PageRepositorySlick @Inject()(
         comments
         (comment_id, user_id, url, text, status, updated_at, created_at)
       values
-        ($commentId, ${ctx.userId}, ${url.value}, ${comment.text.value}, ${CommentStatus.Alived.value}, $justNow, $justNow)
+        ($commentId, ${ctx.userId.value}, ${url.value}, ${comment.text.value}, ${CommentStatus.Alived.value}, $justNow, $justNow)
     """.map(_ => ())
     DBIOResult(dbio)
   }

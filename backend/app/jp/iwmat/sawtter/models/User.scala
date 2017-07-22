@@ -2,11 +2,13 @@ package jp.iwmat.sawtter.models
 
 import java.time.ZonedDateTime
 
+import jp.iwmat.sawtter.models.types.{ Email, ID, Version }
+
 case class User(
-  userId: Long,
-  email: String,
+  userId: ID[User],
+  email: Email[User],
   status: UserStatus,
-  version: Long,
+  version: Version[User],
   updatedAt: ZonedDateTime,
   createdAt: ZonedDateTime
 )

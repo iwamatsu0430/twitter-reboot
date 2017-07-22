@@ -31,14 +31,14 @@ class UserRepositorySlick @Inject()(
       .as[(Long, String, String, Long, ZonedDateTime, ZonedDateTime)]
       .map(_.headOption.flatMap { case (userId, email, status, version, updatedAt, createdAt) =>
         UserStatus.valueOf(status).toOption.map { status =>
-          User(userId, email, status, version, updatedAt, createdAt)
+          User(ID(userId), Email(email), status, Version(version), updatedAt, createdAt)
         }
       })
     DBIOResult(dbio)
   }
 
-  def findBy(userId: Long): DBResult[Option[User]] = {
-    findAny("user_id", userId)
+  def findBy(userId: ID[User]): DBResult[Option[User]] = {
+    findAny("user_id", userId.value)
   }
 
   def findBy(email: Email[SignUp]): DBResult[Option[User]] = {
@@ -61,7 +61,7 @@ class UserRepositorySlick @Inject()(
       .as[(Long, String, String, Long, ZonedDateTime, ZonedDateTime)]
       .map(_.headOption.flatMap { case (userId, email, status, version, updatedAt, createdAt) =>
         UserStatus.valueOf(status).toOption.map { status =>
-          User(userId, email, status, version, updatedAt, createdAt)
+          User(ID(userId), Email(email), status, Version(version), updatedAt, createdAt)
         }
       })
     DBIOResult(dbio)
@@ -84,7 +84,7 @@ class UserRepositorySlick @Inject()(
     """
       .as[(String, Long, ZonedDateTime)]
       .map(_.headOption.map { case (token, userId, expiredAt) =>
-        UserToken(userId, token, expiredAt)
+        UserToken(ID(userId), Token(token), expiredAt)
       })
     DBIOResult(dbio)
   }
@@ -93,7 +93,7 @@ class UserRepositorySlick @Inject()(
     val justNow = clocker.now
     val userId = identifyBuilder.generate()
     val token = identifyBuilder.generateUUID()
-    val userToken = UserToken(userId, token, justNow.plusDays(7))
+    val userToken = UserToken(ID(userId), Token(token), justNow.plusDays(7))
 
     def addUser() = {
       val hashed = identifyBuilder.hash(signup.password.value)
@@ -125,14 +125,15 @@ class UserRepositorySlick @Inject()(
   }
 
   def enable(user: User): DBResult[Unit] = {
+    // FIXME typesのsetをつくる
     val dbio = sqlu"""
       update
         users
       set
         status = ${UserStatus.Enabled.value},
-        version = ${user.version + 1L}
+        version = ${user.version.next.value}
       where
-        user_id = ${user.userId}
+        user_id = ${user.userId.value}
     """.map(_ => ())
     DBIOResult(dbio)
   }

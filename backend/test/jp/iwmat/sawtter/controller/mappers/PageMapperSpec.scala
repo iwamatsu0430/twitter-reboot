@@ -33,7 +33,7 @@ class PageMapperSpec extends WordSpec with MustMatchers with PageMapper {
 
   "commentWrites" must {
     "can convert with writes" in {
-      val comment = Comment(1L, URL("url"), 1L, CommentText("hello"), 1L, ZonedDateTime.of(2017, 7, 21, 0, 0, 0, 0, ZoneOffset.UTC))
+      val comment = Comment(ID(1L), URL("url"), ID(1L), CommentText("hello"), 1L, ZonedDateTime.of(2017, 7, 21, 0, 0, 0, 0, ZoneOffset.UTC))
       Json.toJson(comment) mustBe Json.obj(
         "commentId" -> "1",
         "text" -> "hello",

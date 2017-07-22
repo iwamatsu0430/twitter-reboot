@@ -4,6 +4,8 @@ import java.time.ZonedDateTime
 
 import org.scalatest._
 
+import jp.iwmat.sawtter.models.types.{ Email, ID, Version }
+
 class UserSpecBase extends WordSpec with MustMatchers {
   "isValidForSignUp" must {
     "returns true by empty user" in {
@@ -12,10 +14,10 @@ class UserSpecBase extends WordSpec with MustMatchers {
 
     "returns true by disabled user" in {
       val user = User(
-        userId = 1L,
-        email = "",
+        userId = ID(1L),
+        email = Email(""),
         status = UserStatus.Disabled,
-        version = 1L,
+        version = Version.init,
         updatedAt = ZonedDateTime.now,
         createdAt = ZonedDateTime.now
       )
@@ -24,10 +26,10 @@ class UserSpecBase extends WordSpec with MustMatchers {
 
     "returns false by enabled user" in {
       val user = User(
-        userId = 1L,
-        email = "",
+        userId = ID(1L),
+        email = Email(""),
         status = UserStatus.Enabled,
-        version = 1L,
+        version = Version.init,
         updatedAt = ZonedDateTime.now,
         createdAt = ZonedDateTime.now
       )

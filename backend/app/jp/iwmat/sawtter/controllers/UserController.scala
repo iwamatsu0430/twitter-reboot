@@ -7,6 +7,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import play.api.libs.json.Json
 
 
+import jp.iwmat.sawtter.controllers.mappers.UserMapper
 import jp.iwmat.sawtter.models.Enum.writes._
 import jp.iwmat.sawtter.models.User
 import jp.iwmat.sawtter.services.SessionService
@@ -17,9 +18,7 @@ class UserController @Inject() (
 )(
   implicit
   val ec: ExecutionContext
-) extends ControllerBase {
-
-  implicit val userWrites = Json.writes[User]
+) extends ControllerBase with UserMapper {
 
   def me = PublicAction.async { implicit req =>
     sessionService.fetch().toResult

@@ -17,7 +17,7 @@ trait PageMapper extends MapperBase {
 
   implicit val commentWrites: Writes[Comment] = new Writes[Comment] {
     def writes(comment: Comment): JsValue = Json.obj(
-      "commentId" -> JsString(comment.commentId.toString),
+      "commentId" -> JsString(comment.commentId.value.toString),
       "text" -> Json.toJson(comment.text),
       "favorites" -> JsNumber(comment.favorites),
       "createdAt" -> Json.toJson(comment.createdAt)

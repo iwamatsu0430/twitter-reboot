@@ -24,8 +24,8 @@ class MailgunMailer @Inject()(
     val key = conf.getString("mailgun.key").getOrElse("") // FIXME
     val body = Map(
       "from" -> Seq(s"SAWTTER 事務局 <${mailData.from}>"),
-      "h:Sender" -> Seq(mailData.from),
-      "to" -> Seq(mailData.to),
+      "h:Sender" -> Seq(mailData.from.value),
+      "to" -> Seq(mailData.to.value),
       "subject" -> Seq(mailData.subject),
       "text" -> Seq(mailData.text)
     )
