@@ -6,7 +6,10 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 import play.api.libs.json.Json
 
+import jp.iwmat.sawtter.Result
+import jp.iwmat.sawtter.controllers.mappers.PageMapper
 import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.types._
 import jp.iwmat.sawtter.services.{ PageService, SessionService }
 
 @Singleton
@@ -16,28 +19,34 @@ class PageController @Inject()(
 )(
   implicit
   val ec: ExecutionContext
-) extends ControllerBase {
+) extends ControllerBase with PageMapper {
 
-  implicit val commentWrites = Json.writes[Comment]
-  implicit val newCommentReads = Json.reads[NewComment]
-
-  def canIFrame(url: String) = Action.async {
-    pageService.canIFrame(url).toResult
+  def canIFrame(urlValue: String) = Action.async {
+    (for {
+      url <- Result(URL(urlValue))
+      _ <- Result.either(url.isValid) or Errors.InvalidURLParam(urlValue)
+      result <- pageService.canIFrame(url)
+    } yield result).toResult
   }
 
   // TODO
-  def fetchImage(url: String) = Action.async {
+  def fetchImage(urlValue: String) = Action.async {
     scala.concurrent.Future.successful(Ok)
   }
 
-  def listComment(url: String) = Action.async {
-    pageService.listComments(url).toResult
+  def listComment(urlValue: String) = Action.async {
+    (for {
+      url <- Result(URL(urlValue))
+      _ <- Result.either(url.isValid) or Errors.InvalidURLParam(urlValue)
+      comments <- pageService.listComments(url)
+    } yield comments).toResult
   }
 
-  def addComment(url: String) = SecureAction.async(parse.json) { implicit req =>
+  def addComment(urlValue: String) = SecureAction.async(parse.json) { implicit req =>
     (for {
+      url <- Result(URL(urlValue))
+      _ <- Result.either(url.isValid) or Errors.InvalidURLParam(urlValue)
       payload <- deserializeT[NewComment, Future]
-      // TODO validation length 1 ~ 140
       _ <- pageService.addComment(url, payload)
     } yield ()).toResult
   }

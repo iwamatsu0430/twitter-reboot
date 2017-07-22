@@ -2,7 +2,7 @@ package jp.iwmat
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-import scalaz.{ \/, \/-, EitherT }
+import scalaz.{ \/, \/-, -\/, EitherT }
 
 import jp.iwmat.sawtter.models.Errors
 
@@ -23,6 +23,14 @@ package object sawtter {
       val eitherF: Future[Errors \/ A] = future.map(a => \/-(a))
       EitherT(eitherF)
     }
+
+    case class ResultEither(condition: Boolean) {
+      def or(e: Errors): Result[Unit] =
+        if (condition) Result(()) else Result(-\/(e))
+    }
+
+    def either(condition: => Boolean): ResultEither =
+      ResultEither(condition)
   }
 }
 

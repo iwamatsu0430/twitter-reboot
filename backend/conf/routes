@@ -10,7 +10,7 @@ GET         /api/auth/logout                            jp.iwmat.sawtter.control
 GET         /api/user/me                                jp.iwmat.sawtter.controllers.UserController.me
 
 # Page
-GET         /api/page/caniframe/:url                    jp.iwmat.sawtter.controllers.PageController.canIFrame(url: String)
-GET         /api/page/image/:url                        jp.iwmat.sawtter.controllers.PageController.fetchImage(url: String)
-GET         /api/page/comment/:url                      jp.iwmat.sawtter.controllers.PageController.listComment(url: String)
-POST        /api/page/comment/:url                      jp.iwmat.sawtter.controllers.PageController.addComment(url: String)
+GET         /api/page/caniframe/:urlValue               jp.iwmat.sawtter.controllers.PageController.canIFrame(urlValue: String)
+GET         /api/page/image/:urlValue                   jp.iwmat.sawtter.controllers.PageController.fetchImage(urlValue: String)
+GET         /api/page/comment/:urlValue                 jp.iwmat.sawtter.controllers.PageController.listComment(urlValue: String)
+POST        /api/page/comment/:urlValue                 jp.iwmat.sawtter.controllers.PageController.addComment(urlValue: String)

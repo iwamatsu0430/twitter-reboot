@@ -29,6 +29,11 @@ object Errors {
     }
   }
 
+  case class InvalidURLParam[A](param: A) extends Errors {
+    val code = "error.invalidURLParam"
+    val message = s"invalid url param received. param=$param"
+  }
+
   case class JsonError(error: JsError) extends Errors {
     val code = "error.json"
     val message = s"Json error occured. error=$error"

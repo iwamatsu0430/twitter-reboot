@@ -41,6 +41,22 @@ class AuthMapperSpec extends WordSpec with MustMatchers with AuthMapper {
         "password": "$invalidPassword"
       }""").validate[SignUp].isError mustBe true
     }
+
+    "cannot convert valid email, no password" in {
+      Json.parse(s"""{
+        "email": "$validEmail"
+      }""").validate[SignUp].isError mustBe true
+    }
+
+    "cannot convert no email, valid password" in {
+      Json.parse(s"""{
+        "password": "$validPassword"
+      }""").validate[SignUp].isError mustBe true
+    }
+
+    "cannot convert no email, no password" in {
+      Json.parse(s"""{}""").validate[SignUp].isError mustBe true
+    }
   }
 
   "loginReads" must {
@@ -65,11 +81,20 @@ class AuthMapperSpec extends WordSpec with MustMatchers with AuthMapper {
       }""").validate[Login].isError mustBe true
     }
 
-    "cannot convert invalid email, invalid password" in {
+    "cannot convert valid email, no password" in {
       Json.parse(s"""{
-        "email": "$invalidEmail",
+        "email": "$validEmail"
+      }""").validate[Login].isError mustBe true
+    }
+
+    "cannot convert no email, valid password" in {
+      Json.parse(s"""{
         "password": "$invalidPassword"
       }""").validate[Login].isError mustBe true
+    }
+
+    "cannot convert no email, no password" in {
+      Json.parse(s"""{}""").validate[Login].isError mustBe true
     }
   }
 }

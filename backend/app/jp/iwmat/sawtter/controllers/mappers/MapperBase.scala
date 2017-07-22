@@ -12,6 +12,12 @@ trait MapperBase {
     }
   }
 
+  implicit def typeStringWrites[A, B[A]](implicit iso: Iso[String, B[A]]): Writes[B[A]] = new Writes[B[A]] {
+    def writes(b: B[A]): JsValue = {
+      JsString(iso.from(b))
+    }
+  }
+
   implicit val unitWrites: Writes[Unit] = new Writes[Unit] {
     def writes(value: Unit): JsValue = JsNull
   }

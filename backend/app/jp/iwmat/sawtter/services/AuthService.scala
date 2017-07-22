@@ -26,7 +26,7 @@ class AuthService @Inject() (
   def signup(signup: SignUp): Result[Unit] = {
     val result = for {
       userOpt <- userRepository.findBy(signup.email)
-      _ <- DBResult.either(User.isValidForSignUp(userOpt)).or(Errors.signup.Exists(signup))
+      _ <- DBResult.either(User.isValidForSignUp(userOpt)) or Errors.signup.Exists(signup)
       token <- userRepository.add(signup)
       mail = SignUpMail(signup.email, sawtterConf.domain, sawtterConf.hosts.backend, token.token)
       _ = mailer.send(mail)

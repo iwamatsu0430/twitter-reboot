@@ -7,6 +7,7 @@ import scala.concurrent.ExecutionContext
 import jp.iwmat.sawtter._
 import jp.iwmat.sawtter.http.PageHttp
 import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.types.URL
 import jp.iwmat.sawtter.repositories._
 
 class PageService @Inject()(
@@ -18,16 +19,16 @@ class PageService @Inject()(
   rdb: RDB
 ) {
 
-  def canIFrame(url: String): Result[Boolean] = {
+  def canIFrame(url: URL[_]): Result[Boolean] = {
     pageHttp.canIFrame(url)
   }
 
-  def listComments(url: String): Result[Seq[Comment]] = {
+  def listComments(url: URL[_]): Result[Seq[Comment]] = {
     val result = pageRepository.listComments(url)
     rdb.exec(result)
   }
 
-  def addComment(url: String, comment: NewComment)(implicit ctx: User): Result[Unit] = {
+  def addComment(url: URL[_], comment: NewComment)(implicit ctx: User): Result[Unit] = {
     val result = pageRepository.addComment(url, comment)
     rdb.exec(result)
   }
