@@ -47,14 +47,15 @@ class UserRepositorySlick @Inject()(
   }
 
   def findBy(login: Login): DBResult[Option[User]] = {
+    // FIXME typeのsetをつくる
     val dbio = sql"""
       select
         user_id, email, status, version, updated_at, created_at
       from
         users
       where
-        email = ${login.email} and
-        password = ${identifyBuilder.hash(login.password)}
+        email = ${login.email.value} and
+        password = ${identifyBuilder.hash(login.password.value)}
       limit 1
     """
       .as[(Long, String, String, Long, ZonedDateTime, ZonedDateTime)]
