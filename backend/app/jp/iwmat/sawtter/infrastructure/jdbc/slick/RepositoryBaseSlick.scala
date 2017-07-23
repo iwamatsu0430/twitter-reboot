@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 import slick.driver.MySQLDriver.API
 import slick.jdbc.{ GetResult, PositionedParameters, PositionedResult, SetParameter }
 
-import jp.iwmat.sawtter.models.Enum
+import jp.iwmat.sawtter.models.{ Enum, Iso }
 
 trait RepositoryBaseSlick extends API {
 
@@ -21,6 +21,12 @@ trait RepositoryBaseSlick extends API {
       val datetimeStr = rs.nextString()
       val ldt = LocalDateTime.parse(datetimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"))
       ldt.atZone(ZoneOffset.UTC)
+    }
+  }
+
+  class GetLongType[A, B[A]](implicit iso: Iso[Long, B[A]]) extends GetResult[B[A]] {
+    def apply(rs: PositionedResult): B[A] = {
+      iso.to(rs.nextLong())
     }
   }
 

@@ -19,7 +19,6 @@ class PageRepositorySlick @Inject()(
 ) extends RepositoryBaseSlick with PageRepository {
 
   def listComments(url: URL[_]): DBResult[Seq[Comment]] = {
-    // FIXME typeのgetをつくる
     val dbio = sql"""
     select
       c.comment_id, c.url, c.user_id, c.text, count(cf.comment_favorites_id) as favorites  , c.created_at
@@ -45,7 +44,6 @@ class PageRepositorySlick @Inject()(
   def addComment(url: URL[_], comment: NewComment)(implicit ctx: User): DBResult[Unit] = {
     val commentId = identifyBuilder.generate()
     val justNow = clocker.now
-    // FIXME typeのsetをつくる
     val dbio = sqlu"""
       insert into
         comments

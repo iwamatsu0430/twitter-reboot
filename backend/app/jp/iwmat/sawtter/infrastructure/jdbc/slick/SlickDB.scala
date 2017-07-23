@@ -34,7 +34,7 @@ class SlickDB @Inject()(
   ec: ExecutionContext
 ) extends RDB with HasDatabaseConfigProvider[JdbcProfile] {
 
-  def exitByUnexpectedType() = throw new Exception("xxx") // FIXME
+  def exitByUnexpectedType() = throw new Exception("DBResult is not DBIOResult. Confirm DI settings.")
 
   implicit val dbioMonad: Monad[DBIO] = new Monad[DBIO] {
     def point[A](value: => A): DBIO[A] = DBIO.successful(value)

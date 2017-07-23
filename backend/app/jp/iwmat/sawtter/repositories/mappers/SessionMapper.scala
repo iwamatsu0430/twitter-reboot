@@ -18,7 +18,7 @@ trait SessionMapper extends TypeReads with TypeWrites {
         value <- json.validate[String]
         result <- UserStatus.values.find(_.value == value) match {
           case Some(userStatus) => JsSuccess(userStatus)
-          case None => JsError(ValidationError("")) // FIXME
+          case None => JsError(JsPath \ "status", s"Unknown status. status=$value")
         }
       } yield result
     }

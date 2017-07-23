@@ -42,12 +42,10 @@ class UserRepositorySlick @Inject()(
   }
 
   def findBy(email: Email[SignUp]): DBResult[Option[User]] = {
-    // FIXME typeのgetをつくる
     findAny("email", email.value)
   }
 
   def findBy(login: Login): DBResult[Option[User]] = {
-    // FIXME typeのsetをつくる
     val dbio = sql"""
       select
         user_id, email, status, version, updated_at, created_at
@@ -97,7 +95,6 @@ class UserRepositorySlick @Inject()(
 
     def addUser() = {
       val hashed = identifyBuilder.hash(signup.password.value)
-      // FIXME isoのsetをつくる
       sql"""
         insert into
           users
@@ -125,7 +122,6 @@ class UserRepositorySlick @Inject()(
   }
 
   def enable(user: User): DBResult[Unit] = {
-    // FIXME typesのsetをつくる
     val dbio = sqlu"""
       update
         users

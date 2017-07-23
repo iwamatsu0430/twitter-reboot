@@ -5,23 +5,20 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-import play.api.Configuration
 import play.api.libs.ws.{ WSAuthScheme, WSClient }
 
+import jp.iwmat.sawtter.configurations.MailgunConfiguration
 import jp.iwmat.sawtter.models.mails._
 import jp.iwmat.sawtter.repositories._
 
 class MailgunMailer @Inject()(
-  conf: Configuration,
+  conf: MailgunConfiguration,
   ws: WSClient
 )(
   implicit
   ec: ExecutionContext
 ) extends Mailer {
   def send(mailData: MailData): Unit = {
-    val url = conf.getString("mailgun.url").getOrElse("") // FIXME
-    val user = conf.getString("mailgun.user").getOrElse("") // FIXME
-    val key = conf.getString("mailgun.key").getOrElse("") // FIXME
     val body = Map(
       "from" -> Seq(s"SAWTTER 事務局 <${mailData.from}>"),
       "h:Sender" -> Seq(mailData.from.value),
@@ -30,8 +27,8 @@ class MailgunMailer @Inject()(
       "text" -> Seq(mailData.text)
     )
     ws
-      .url(url)
-      .withAuth(user, key, WSAuthScheme.BASIC)
+      .url(conf.url)
+      .withAuth(conf.user, conf.key, WSAuthScheme.BASIC)
       .withRequestTimeout(10 seconds)
       .post(body)
       .onComplete {
