@@ -39,7 +39,7 @@ build-frontend:
         npm run build
     - script:
       name: copy artifacts
-      code: cp frontend/app frontend/appspec.yml $WERCKER_OUTPUT_DIR
+      code: cp -rp frontend/app frontend/appspec.yml $WERCKER_OUTPUT_DIR
 
 deploy-backend:
   box: cgswong/aws
