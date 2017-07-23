@@ -35,6 +35,7 @@ build-frontend:
       name: build frontend
       code: |
         cd frontend
+        npm i
         npm run build
     - script:
       name: copy artifacts
