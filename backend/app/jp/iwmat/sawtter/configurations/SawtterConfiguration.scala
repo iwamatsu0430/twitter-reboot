@@ -8,9 +8,9 @@ class SawtterConfiguration @Inject()(val conf: Configuration) extends Configurat
 
   case class Hosts(frontend: String, backend: String)
 
-  val domain = getString("sawtter.domain")
+  lazy val domain = getString("sawtter.domain")
 
-  val hosts = Hosts(
+  lazy val hosts = Hosts(
     getString("sawtter.hosts.frontend"),
     getString("sawtter.hosts.backend")
   )

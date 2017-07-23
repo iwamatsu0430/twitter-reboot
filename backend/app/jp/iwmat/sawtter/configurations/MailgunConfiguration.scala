@@ -5,7 +5,7 @@ import javax.inject.Inject
 import play.api.Configuration
 
 class MailgunConfiguration @Inject()(val conf: Configuration) extends ConfigurationBase {
-  val url = getString("mailgun.url")
-  val user = getString("mailgun.user")
-  val key = getString("mailgun.key")
+  lazy val url = getString("mailgun.url")
+  lazy val user = getString("mailgun.user")
+  lazy val key = getString("mailgun.key")
 }
