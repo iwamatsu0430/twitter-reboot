@@ -26,9 +26,9 @@ deploy-backend:
       name: deploy backend
       code: |
         unzip $APP_NAME-$VERSION.zip
-        cp -rp $APP_NAME-$VERSION dist
-        mkdir scripts
-        cp *.sh scripts
-        mkdir build
-        tar -cf build/artifact.tar dist scripts
-        s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./ s3://$AWS_BUCKET_NAME/build/
+        mkdir backend
+        mkdir backend/scripts
+        cp -rp $APP_NAME-$VERSION backend
+        cp *.sh backend/scripts
+        cp appspec.yml backend
+        s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./backend/ s3://$AWS_BUCKET_NAME/backend/
