@@ -34,5 +34,5 @@ deploy-backend:
     - s3sync:
       key-id: $S3_ACCESS_KEY
       key-secret: $S3_SECRET_KEY
-      bucket-url: s3://$AWS_BUCKET_NAME/$AWS_BUCKET_PATH/
+      bucket-url: s3://$AWS_BUCKET_NAME/
       source-dir: build
