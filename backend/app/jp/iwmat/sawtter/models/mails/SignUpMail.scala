@@ -16,6 +16,6 @@ case class SignUpMail(
   val text: String = s"""SAWTTERへようこそ！
 
 登録を完了するために以下のURLをクリックしてください！
-$host/api/auth/verify/$token
+$host/api/auth/verify/${token.value}
 """
 }

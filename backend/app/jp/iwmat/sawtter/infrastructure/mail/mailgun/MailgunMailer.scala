@@ -18,9 +18,10 @@ class MailgunMailer @Inject()(
   implicit
   ec: ExecutionContext
 ) extends Mailer {
+
   def send(mailData: MailData): Unit = {
     val body = Map(
-      "from" -> Seq(s"SAWTTER 事務局 <${mailData.from}>"),
+      "from" -> Seq(s"SAWTTER 事務局 <${mailData.from.value}>"),
       "h:Sender" -> Seq(mailData.from.value),
       "to" -> Seq(mailData.to.value),
       "subject" -> Seq(mailData.subject),
@@ -32,8 +33,8 @@ class MailgunMailer @Inject()(
       .withRequestTimeout(10 seconds)
       .post(body)
       .onComplete {
-        case scala.util.Success(s) => println(s"status: ${s.status}, body: ${s.body}")
-        case scala.util.Failure(f) => println(s"success: $f")
+        case scala.util.Success(s) => logger.debug(s"Mailgun response >>> status: ${s.status}, body: ${s.body}")
+        case scala.util.Failure(f) => logger.debug(s"Mailgun response >>> failure: $f")
       }
   }
 }

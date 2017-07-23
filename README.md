@@ -1,4 +1,4 @@
-# 必要なもの
+# インストールが必要なもの
 
 - docker-compose
 - Scala
@@ -24,7 +24,7 @@
   ```
   $ cd frontend
   $ npm i
-  $ npm run dev
+  $ npm start
   ```
 
-4. [http://localhost:8080/](http://localhost:8080/)へアクセス
+4. [http://localhost:9011/](http://localhost:9011/)へアクセス

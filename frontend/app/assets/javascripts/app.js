@@ -368,6 +368,16 @@ class Sawtter {
       });
   }
 
+  paddingZero(number, length) {
+    return ('0000000000' + number).slice(-length);
+  }
+
+  convertDateFormat(dtStr) {
+    const epoch = Date.parse(dtStr)
+    const dt = new Date(epoch)
+    return `${dt.getFullYear()}/${this.paddingZero(dt.getMonth(), 2)}/${this.paddingZero(dt.getDate(), 2)} ${this.paddingZero(dt.getHours(), 2)}:${this.paddingZero(dt.getMinutes(), 2)}:${this.paddingZero(dt.getSeconds(), 2)}`
+  }
+
   loadComments(url) {
     document.querySelectorAll('.comments ul .comment').forEach(c => c.remove());
     fetch(`${HOST}/api/page/comment/${encodeURIComponent(url)}`, {
@@ -379,7 +389,7 @@ class Sawtter {
         comments.forEach(c => {
           const newComment = this.doms.commentBase.cloneNode(true);
           newComment.querySelector('.comment-content p').innerText = c.text;
-          newComment.querySelector('.comment-content time').innerText = c.createdAt;
+          newComment.querySelector('.comment-content time').innerText = this.convertDateFormat(c.createdAt);
           this.doms.commentParent.appendChild(newComment);
         });
       });

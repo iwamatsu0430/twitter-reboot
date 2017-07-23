@@ -71,10 +71,9 @@ class UserRepositorySlick @Inject()(
         ut.token, ut.user_id, ut.expired_at
       from
         user_tokens as ut
-        join
-          users as u
+        inner join users as u
+          on ut.user_id = u.user_id
       where
-        ut.user_id = u.user_id and
         ut.token = ${token} and
         ut.expired_at >= ${clocker.now} and
         u.status = ${UserStatus.Registered.value}
