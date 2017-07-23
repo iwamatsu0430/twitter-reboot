@@ -2,17 +2,17 @@ version: 0.1
 os: linux
 files:
   - source: /
-    destination: /var/apps
+    destination: /var/apps/backend
 hooks:
   BeforeInstall:
     - location: scripts/cleanup.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   AfterInstall:
     - location: scripts/start.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   ApplicationStop:
     - location: scripts/stop.sh
       timeout: 300
-      runas: root
+      runas: ec2-user

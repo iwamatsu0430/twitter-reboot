@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "babel-plugin-transform-inline-environment-variables": "^0.1.1",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
     "browser-sync": "^2.18.12",
@@ -17,7 +18,8 @@
   "devDependencies": {},
   "scripts": {
     "server": "node server",
-    "build": "browserify src/app.js -o app/assets/javascripts/app.js -t [ babelify --presets es2015 ]; uglifyjs app/assets/javascripts/app.js -c -o app/assets/javascripts/app.min.js"
+    "build": "browserify src/app.js -o app/assets/javascripts/app.js -t [ babelify --presets es2015 --plugins transform-inline-environment-variables ]; uglifyjs app/assets/javascripts/app.js -c -o app/assets/javascripts/app.min.js",
+    "test": "echo 'frontend test coming soon...'"
   },
   "author": "iwamatsu0430",
   "license": "MIT"

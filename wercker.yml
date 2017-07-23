@@ -7,6 +7,15 @@ test-backend:
         cd backend
         sbt test
 
+test-frontend:
+  box: node
+  steps:
+    - script:
+      name: run test
+      code: |
+        cd frontend
+        npm test
+
 build-backend:
   box: 1science/sbt
   steps:
@@ -19,6 +28,18 @@ build-backend:
       name: copy artifacts
       code: cp backend/target/universal/$APP_NAME-$VERSION.zip backend/appspec.yml backend/scripts/* $WERCKER_OUTPUT_DIR
 
+build-frontend:
+  box: node
+  steps:
+    - script:
+      name: build frontend
+      code: |
+        cd frontend
+        npm run build
+    - script:
+      name: copy artifacts
+      code: cp frontend/app frontend/appspec.yml $WERCKER_OUTPUT_DIR
+
 deploy-backend:
   box: cgswong/aws
   steps:
@@ -28,7 +49,18 @@ deploy-backend:
         unzip $APP_NAME-$VERSION.zip
         mkdir backend
         mkdir backend/scripts
-        cp -rp $APP_NAME-$VERSION backend
+        cp -rp $APP_NAME-$VERSION/* backend
         cp *.sh backend/scripts
         cp appspec.yml backend
         s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./backend/ s3://$AWS_BUCKET_NAME/backend/
+
+deploy-frontend:
+  box: cgswong/aws
+  steps:
+    - script:
+      name: deploy frontend
+      code: |
+        mkdir frontend
+        cp app/* -rp frontend
+        cp appspec.yml frontend
+        s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./frontend/ s3://$AWS_BUCKET_NAME/frontend/
