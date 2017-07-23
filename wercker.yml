@@ -49,10 +49,9 @@ deploy-backend:
       code: |
         unzip $APP_NAME-$VERSION.zip
         mkdir backend
-        mkdir backend/scripts
-        cp -rp $APP_NAME-$VERSION/* backend
-        cp *.sh backend/scripts
-        cp appspec.yml backend
+        mkdir scripts
+        cp *.sh scripts
+        tar -cf backend/artifact.tar $APP_NAME-$VERSION/* scripts
         s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./backend/ s3://$AWS_BUCKET_NAME/backend/
 
 deploy-frontend:
@@ -62,6 +61,5 @@ deploy-frontend:
       name: deploy frontend
       code: |
         mkdir frontend
-        cp app/* -rp frontend
-        cp appspec.yml frontend
+        tar -cf frontend/artifact.tar app/*
         s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./frontend/ s3://$AWS_BUCKET_NAME/frontend/
