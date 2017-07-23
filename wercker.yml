@@ -31,4 +31,4 @@ deploy-backend:
         cp *.sh scripts
         mkdir build
         tar -cf build/artifact.tar dist scripts
-        s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./ s3://$AWS_BUCKET_NAME/build
+        s3cmd sync --access_key=$S3_ACCESS_KEY --secret_key=$S3_SECRET_KEY --delete-removed --verbose ./ s3://$AWS_BUCKET_NAME/build/
