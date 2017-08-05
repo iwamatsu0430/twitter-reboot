@@ -1,19 +1,22 @@
 package jp.iwmat.sawtter.base
 
-import scala.concurrent.{ Await, ExecutionContext }
-import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext
 
 import org.scalatestplus.play.{ PlaySpec, OneAppPerSuite }
 import play.api.Application
+import play.api.Logger
 import play.api.inject.guice.GuiceApplicationBuilder
 import scalaz.\/
 import slick.driver.MySQLDriver.api._
 
+import jp.iwmat.sawtter.base.syntax.FutureOps
 import jp.iwmat.sawtter.infrastructure.jdbc._slick._
 import jp.iwmat.sawtter.repositories._
 import jp.iwmat.sawtter.models.Errors
 
-trait DBSpecBase extends PlaySpec with OneAppPerSuite {
+trait DBSpecBase extends PlaySpec with OneAppPerSuite with FutureOps {
+
+  val logger = Logger(getClass)
 
   implicit override lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -33,8 +36,7 @@ trait DBSpecBase extends PlaySpec with OneAppPerSuite {
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def execDB[A](result: DBResult[A]): Errors \/ A = {
-    val future = rdb.exec(result).run
-    Await.result(future, Duration.Inf)
+    rdb.exec(result).run.await()
   }
 
   def begin(): DBIOResult[Int] = DBIOResult(sqlu"begin")
