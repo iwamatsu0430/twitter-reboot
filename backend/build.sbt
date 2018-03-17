@@ -23,6 +23,7 @@ lazy val root = (project in file("."))
       "io.monix"                %% "shade"                % "1.9.5",
       "org.scalaz"              %% "scalaz-core"          % "7.2.12",
 
+      "com.h2database"           % "h2"                   % "1.4.178" % "test",
       "org.scalatest"           %% "scalatest"            % "3.0.1"   % "test",
       "org.scalatestplus.play"  %% "scalatestplus-play"   % "2.0.0"   % "test",
       "org.mockito"              % "mockito-core"         % "2.8.9"   % "test"
