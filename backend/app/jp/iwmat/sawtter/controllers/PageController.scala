@@ -31,7 +31,7 @@ class PageController @Inject()(
 
   // TODO
   def fetchImage(urlValue: String) = Action.async {
-    scala.concurrent.Future.successful(Ok)
+    Future.successful(Ok)
   }
 
   def listComment(urlValue: String) = Action.async {
