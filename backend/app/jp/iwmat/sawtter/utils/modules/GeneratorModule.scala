@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.modules
+package jp.iwmat.sawtter.utils.modules
 
 import javax.inject.Inject
 
@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import play.api.{ Configuration, Environment, Logger }
 
-import jp.iwmat.sawtter.generators._
+import jp.iwmat.sawtter.utils.generators._
 
 class GeneratorModule(environment: Environment, configuration: Configuration) extends AbstractModule {
 

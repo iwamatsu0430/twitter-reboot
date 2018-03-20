@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-import jp.iwmat.sawtter.generators.{ Clocker, IdentifyBuilder }
+import jp.iwmat.sawtter.utils.generators.{ Clocker, IdentifyBuilder }
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.models.types._
 import jp.iwmat.sawtter.repositories._
@@ -18,7 +18,7 @@ class PageRepositorySlick @Inject()(
   ec: ExecutionContext
 ) extends RepositoryBaseSlick with PageRepository {
 
-  def listComments(url: URL[_]): DBResult[Seq[Comment]] = {
+  def listComments(url: URL[_]): Transaction[Seq[Comment]] = {
     val dbio = sql"""
     select
       c.comment_id, c.url, c.user_id, c.text, count(cf.comment_favorites_id) as favorites  , c.created_at
@@ -38,10 +38,10 @@ class PageRepositorySlick @Inject()(
         case (commentId, url, userId, text, favorites, createdAt) =>
           Comment(ID(commentId), URL(url), ID(userId), CommentText(text), favorites, createdAt)
       })
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 
-  def addComment(url: URL[_], comment: NewComment)(implicit ctx: User): DBResult[Unit] = {
+  def addComment(url: URL[_], comment: NewComment)(implicit ctx: User): Transaction[Unit] = {
     val commentId = identifyBuilder.generate()
     val justNow = clocker.now
     val dbio = sqlu"""
@@ -51,6 +51,6 @@ class PageRepositorySlick @Inject()(
       values
         ($commentId, ${ctx.userId.value}, ${url.value}, ${comment.text.value}, ${CommentStatus.Alived.value}, $justNow, $justNow)
     """.map(_ => ())
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 }

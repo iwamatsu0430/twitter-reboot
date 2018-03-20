@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.configurations
+package jp.iwmat.sawtter.utils.modules.configurations
 
 import play.api.Configuration
 
@@ -8,9 +8,9 @@ trait ConfigurationBase {
     override def getMessage = s"Configuration value '$path' Not found."
   }
 
-  def conf: Configuration
+  def configuration: Configuration
 
   def getString(path: String): String = {
-    conf.getString(path).getOrElse(throw new ConfigurationException(path))
+    configuration.getString(path).getOrElse(throw new ConfigurationException(path))
   }
 }

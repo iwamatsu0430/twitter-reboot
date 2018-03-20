@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.modules
+package jp.iwmat.sawtter.utils.modules
 
 import com.google.inject.AbstractModule
 import play.api.{ Configuration, Environment, Logger }

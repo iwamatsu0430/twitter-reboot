@@ -4,54 +4,63 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-import play.api.Configuration
-
 import jp.iwmat.sawtter._
-import jp.iwmat.sawtter.configurations._
 import jp.iwmat.sawtter.models._
+import jp.iwmat.sawtter.models.configurations._
 import jp.iwmat.sawtter.models.mails._
 import jp.iwmat.sawtter.repositories._
+import jp.iwmat.sawtter.utils.Mailer
 
 class AuthService @Inject() (
-  userRepository: UserRepository,
-  sessionRepository: SessionRepository,
-  mailer: Mailer,
-  sawtterConf: SawtterConfiguration
+  val userRepo: UserRepository,
+  val sessionRepo: SessionRepository,
+  val mailer: Mailer,
+  sawtterConf: SawtterConf
 )(
   implicit
-  ec: ExecutionContext,
-  rdb: RDB
-) {
+  val ec: ExecutionContext,
+  val rdb: RDB
+) extends ServiceBase {
 
   def signup(signup: SignUp): Result[Unit] = {
-    val result = for {
-      userOpt <- userRepository.findBy(signup.email)
-      _ <- DBResult.either(User.isValidForSignUp(userOpt)) or Errors.signup.Exists(signup)
-      token <- userRepository.add(signup)
-      mail = SignUpMail(signup.email, sawtterConf.domain, sawtterConf.hosts.backend, token.token)
+    val transaction = for {
+      userOpt <- userRepo.findBy(signup.email)
+      _ <- User.isValidForSignUp(userOpt) orElse AuthServiceErrors.userNotExists(signup)
+      token <- userRepo.add(signup)
+      mail = SignUpMail.create(signup.email, token.token, sawtterConf)
       _ = mailer.send(mail)
     } yield ()
-    rdb.exec(result)
+    transaction.execute()
   }
 
-  def verify(token: String): Result[String] = {
-    val result = for {
-      tokenOpt <- userRepository.findToken(token)
-      token <- DBResult.getOrElse(tokenOpt)(Errors.signup.TokenNotFound(token))
-      userOpt <- userRepository.findBy(token.userId)
-      user <- DBResult.getOrElse(userOpt)(Errors.Unexpected("User must be exists"))
-      _ <- userRepository.enable(user)
-      sessionKey = sessionRepository.add(user)
+  def verify(tokenString: String): Result[String] = {
+    val transaction = for {
+      tokenOpt <- userRepo.findToken(tokenString)
+      token <- tokenOpt getOr AuthServiceErrors.tokenNotFound(tokenString)
+      userOpt <- userRepo.findBy(token.userId)
+      user <- userOpt getOr AuthServiceErrors.userMustExists
+      _ <- userRepo.enable(user)
+      sessionKey = sessionRepo.add(user)
     } yield sessionKey
-    rdb.exec(result)
+    transaction.execute()
   }
 
   def login(login: Login): Result[String] = {
-    val result = for {
-      userOpt <- userRepository.findBy(login)
-      user <- DBResult.getOrElse(userOpt)(Errors.login.NotFound(login))
-      sessionKey = sessionRepository.add(user)
+    val transaction = for {
+      userOpt <- userRepo.findBy(login)
+      user <- userOpt getOr AuthServiceErrors.userNotFound(login)
+      sessionKey = sessionRepo.add(user)
     } yield sessionKey
-    rdb.exec(result)
+    transaction.execute()
   }
+}
+
+object AuthServiceErrors {
+  def userNotExists(signup: SignUp) = Errors.signup.Exists(signup)
+
+  def tokenNotFound(token: String) = Errors.signup.TokenNotFound(token)
+
+  def userMustExists = Errors.Unexpected("User must be exists")
+
+  def userNotFound(login: Login) = Errors.login.NotFound(login)
 }

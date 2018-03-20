@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import play.api.mvc._
 
 import jp.iwmat.sawtter.models.Errors
-import jp.iwmat.sawtter.syntax.ResultOps
+import jp.iwmat.sawtter.utils.syntax.ResultOps
 
 trait SecureAction extends ActionBase with ResultOps {
   def apply(requestHandler: SecureRequest[AnyContent] => Result): Action[AnyContent] = {

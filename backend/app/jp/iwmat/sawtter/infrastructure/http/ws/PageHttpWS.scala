@@ -7,8 +7,8 @@ import scala.concurrent.ExecutionContext
 import play.api.libs.ws.WSClient
 
 import jp.iwmat.sawtter._
-import jp.iwmat.sawtter.http.PageHttp
 import jp.iwmat.sawtter.models.types.URL
+import jp.iwmat.sawtter.utils.http.PageHttp
 
 class PageHttpWS @Inject()(
   ws: WSClient

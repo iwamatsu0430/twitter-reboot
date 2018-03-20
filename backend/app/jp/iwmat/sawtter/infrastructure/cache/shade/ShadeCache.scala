@@ -8,8 +8,6 @@ import scala.concurrent.duration.Duration
 import play.api.libs.json._
 import shade.memcached._
 
-import jp.iwmat.sawtter.repositories.Cache
-
 @Singleton
 class ShadeCache @Inject()(
   @Named("memcached.host") host: String,
@@ -17,7 +15,7 @@ class ShadeCache @Inject()(
 )(
   implicit
   ec: ExecutionContext
-) extends Cache {
+) {
 
   val client = Memcached(Configuration(s"$host:$port"))
 

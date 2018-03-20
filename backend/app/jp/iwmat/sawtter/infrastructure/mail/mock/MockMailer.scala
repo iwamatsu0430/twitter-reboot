@@ -1,7 +1,7 @@
 package jp.iwmat.sawtter.infrastructure.mail._mock
 
 import jp.iwmat.sawtter.models.mails._
-import jp.iwmat.sawtter.repositories._
+import jp.iwmat.sawtter.utils.Mailer
 
 class MockMailer extends Mailer {
 

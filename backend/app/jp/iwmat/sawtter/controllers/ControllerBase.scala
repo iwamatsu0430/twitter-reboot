@@ -11,12 +11,11 @@ import jp.iwmat.sawtter.controllers.mappers.MapperBase
 import jp.iwmat.sawtter.controllers.secure._
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.services.SessionService
-import jp.iwmat.sawtter.syntax.{ ResultOps, ToEitherOps }
+import jp.iwmat.sawtter.utils.syntax.ResultOps
 
 trait ControllerBase
   extends Controller
   with MapperBase
-  with ToEitherOps
   with ResultOps
   with FutureInstances { self =>
 
@@ -47,6 +46,6 @@ trait ControllerBase
   }
 
   def deserializeT[A, F[_]](implicit req: Request[JsValue], reads: Reads[A], monad: Monad[F]): EitherT[F, Errors, A] = {
-    deserialize(req, reads, monad).et
+    EitherT(deserialize(req, reads, monad))
   }
 }

@@ -7,12 +7,12 @@ import scala.concurrent.duration._
 
 import play.api.libs.ws.{ WSAuthScheme, WSClient }
 
-import jp.iwmat.sawtter.configurations.MailgunConfiguration
+import jp.iwmat.sawtter.models.configurations.MailgunConf
 import jp.iwmat.sawtter.models.mails._
-import jp.iwmat.sawtter.repositories._
+import jp.iwmat.sawtter.utils.Mailer
 
 class MailgunMailer @Inject()(
-  conf: MailgunConfiguration,
+  conf: MailgunConf,
   ws: WSClient
 )(
   implicit

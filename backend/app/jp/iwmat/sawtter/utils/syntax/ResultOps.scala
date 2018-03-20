@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.syntax
+package jp.iwmat.sawtter.utils.syntax
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -16,17 +16,10 @@ object Errors {
     val message = s"Please login."
   }
 
-  trait Unexpected extends Errors
+  case class Unexpected(code: String, message: String) extends Errors
   object Unexpected {
-    def apply(t: Throwable): Unexpected = new Unexpected {
-      val code = "error.unexpected"
-      val message = s"Unexpected error occured. error=$t"
-    }
-
-    def apply(msg: String): Unexpected = new Unexpected {
-      val code = "error.unexpected"
-      val message = msg
-    }
+    def apply(t: Throwable): Unexpected = Unexpected("error.unexpected", s"Unexpected error occured. error=$t")
+    def apply(msg: String): Unexpected = Unexpected("error.unexpected", msg)
   }
 
   case class InvalidURLParam[A](param: A) extends Errors {

@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.http
+package jp.iwmat.sawtter.utils.http
 
 import jp.iwmat.sawtter._
 import jp.iwmat.sawtter.models.types.URL

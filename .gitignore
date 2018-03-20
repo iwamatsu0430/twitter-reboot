@@ -8,3 +8,6 @@ target
 /RUNNING_PID
 .DS_Store
 node_modules
+.metaserver
+.metadata
+.project

@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.modules
+package jp.iwmat.sawtter.utils.modules
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
@@ -16,7 +16,6 @@ class ShadeCacheModule(environment: Environment, configuration: Configuration) e
   val portKey = "memcached.port"
 
   def configure() = {
-
     bind(classOf[String])
       .annotatedWith(Names.named(hostKey))
       .toInstance(
@@ -31,6 +30,6 @@ class ShadeCacheModule(environment: Environment, configuration: Configuration) e
           .getInt(portKey)
           .getOrElse(keyException(portKey))
       )
-    bind(classOf[Cache]).to(classOf[ShadeCache])
+    bind(classOf[SessionRepository]).to(classOf[SessionRepositoryShade])
   }
 }

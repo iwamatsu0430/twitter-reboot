@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-import jp.iwmat.sawtter.generators.{ Clocker, IdentifyBuilder }
+import jp.iwmat.sawtter.utils.generators.{ Clocker, IdentifyBuilder }
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.models.types._
 import jp.iwmat.sawtter.repositories._
@@ -18,7 +18,7 @@ class UserRepositorySlick @Inject()(
   ec: ExecutionContext
 ) extends RepositoryBaseSlick with UserRepository {
 
-  def findAny[A](key: String, value: A)(implicit setter: slick.jdbc.SetParameter[A]): DBResult[Option[User]] = {
+  def findAny[A](key: String, value: A)(implicit setter: slick.jdbc.SetParameter[A]): Transaction[Option[User]] = {
     val dbio = sql"""
       select
         user_id, email, status, version, updated_at, created_at
@@ -34,18 +34,18 @@ class UserRepositorySlick @Inject()(
           User(ID(userId), Email(email), status, Version(version), updatedAt, createdAt)
         }
       })
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 
-  def findBy(userId: ID[User]): DBResult[Option[User]] = {
+  def findBy(userId: ID[User]): Transaction[Option[User]] = {
     findAny("user_id", userId.value)
   }
 
-  def findBy(email: Email[SignUp]): DBResult[Option[User]] = {
+  def findBy(email: Email[SignUp]): Transaction[Option[User]] = {
     findAny("email", email.value)
   }
 
-  def findBy(login: Login): DBResult[Option[User]] = {
+  def findBy(login: Login): Transaction[Option[User]] = {
     val dbio = sql"""
       select
         user_id, email, status, version, updated_at, created_at
@@ -62,10 +62,10 @@ class UserRepositorySlick @Inject()(
           User(ID(userId), Email(email), status, Version(version), updatedAt, createdAt)
         }
       })
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 
-  def findToken(token: String): DBResult[Option[UserToken]] = {
+  def findToken(token: String): Transaction[Option[UserToken]] = {
     val dbio= sql"""
       select
         ut.token, ut.user_id, ut.expired_at
@@ -83,10 +83,10 @@ class UserRepositorySlick @Inject()(
       .map(_.headOption.map { case (token, userId, expiredAt) =>
         UserToken(ID(userId), Token(token), expiredAt)
       })
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 
-  def add(signup: SignUp): DBResult[UserToken] = {
+  def add(signup: SignUp): Transaction[UserToken] = {
     val justNow = clocker.now
     val userId = identifyBuilder.generate()
     val token = identifyBuilder.generateUUID()
@@ -117,10 +117,10 @@ class UserRepositorySlick @Inject()(
       _ <- addUser()
       _ <- addToken()
     } yield userToken
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 
-  def enable(user: User): DBResult[Unit] = {
+  def enable(user: User): Transaction[Unit] = {
     val dbio = sqlu"""
       update
         users
@@ -130,6 +130,6 @@ class UserRepositorySlick @Inject()(
       where
         user_id = ${user.userId.value}
     """.map(_ => ())
-    DBIOResult(dbio)
+    DBIOTransaction(dbio)
   }
 }

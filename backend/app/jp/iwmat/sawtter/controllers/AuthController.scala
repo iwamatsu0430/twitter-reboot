@@ -4,14 +4,14 @@ import javax.inject.{ Inject, Singleton }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-import jp.iwmat.sawtter.configurations.SawtterConfiguration
 import jp.iwmat.sawtter.controllers.mappers.AuthMapper
+import jp.iwmat.sawtter.models.configurations.SawtterConf
 import jp.iwmat.sawtter.models._
 import jp.iwmat.sawtter.services.{ AuthService, SessionService }
 
 @Singleton
 class AuthController @Inject() (
-  sawtterConf: SawtterConfiguration,
+  sawtterConf: SawtterConf,
   authService: AuthService,
   val sessionService: SessionService
 )(

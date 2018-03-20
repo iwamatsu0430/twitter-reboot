@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.generators
+package jp.iwmat.sawtter.utils.generators
 
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest

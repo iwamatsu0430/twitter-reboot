@@ -1,4 +1,4 @@
-package jp.iwmat.sawtter.repositories
+package jp.iwmat.sawtter.utils
 
 import play.api.Logger
 

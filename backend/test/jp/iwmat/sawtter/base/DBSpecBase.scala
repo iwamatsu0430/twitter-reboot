@@ -35,11 +35,11 @@ trait DBSpecBase extends PlaySpec with OneAppPerSuite with FutureOps {
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
-  def execDB[A](result: DBResult[A]): Errors \/ A = {
+  def execDB[A](result: Transaction[A]): Errors \/ A = {
     rdb.exec(result).run.await()
   }
 
-  def begin(): DBIOResult[Int] = DBIOResult(sqlu"begin")
+  def begin(): DBIOTransaction[Int] = DBIOTransaction(sqlu"begin")
 
-  def rollback(): DBIOResult[Int] = DBIOResult(sqlu"rollback")
+  def rollback(): DBIOTransaction[Int] = DBIOTransaction(sqlu"rollback")
 }

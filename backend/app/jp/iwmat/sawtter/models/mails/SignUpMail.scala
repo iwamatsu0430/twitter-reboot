@@ -1,6 +1,7 @@
 package jp.iwmat.sawtter.models.mails
 
 import jp.iwmat.sawtter.models.{ SignUp, UserToken }
+import jp.iwmat.sawtter.models.configurations.SawtterConf
 import jp.iwmat.sawtter.models.types.{ Email, Token }
 
 case class SignUpMail(
@@ -18,4 +19,17 @@ case class SignUpMail(
 登録を完了するために以下のURLをクリックしてください！
 $host/api/auth/verify/${token.value}
 """
+}
+
+object SignUpMail {
+  def create(
+    email: Email[SignUp],
+    token: Token[UserToken],
+    conf: SawtterConf
+  ): SignUpMail = SignUpMail(
+    email,
+    conf.domain,
+    conf.hosts.backend,
+    token
+  )
 }
